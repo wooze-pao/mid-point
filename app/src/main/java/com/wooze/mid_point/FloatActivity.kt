@@ -31,7 +31,7 @@ class FloatActivity : ComponentActivity() {
         hideFloatWindow() // 隐藏
     }
 
-    fun showFloatWindow () {
+    fun showFloatWindow() {
         floatLifecycle = FloatComposeLifecycle()
         floatLifecycle.performRestore(null)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -60,20 +60,20 @@ class FloatActivity : ComponentActivity() {
         params.x = 0
         params.y = 300
 
-        floatWindowManager.addView(floatComposeView,params)
+        floatWindowManager.addView(floatComposeView, params)
         FloatState.isShowing = true
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
-    fun hideFloatWindow () {
+    fun hideFloatWindow() {
         if (FloatState.isShowing) {
             floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
             floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             floatWindowManager.removeView(floatComposeView)
             FloatState.isShowing = false
-        }else {
+        } else {
             // TODO 对于在未开启状态下的关闭
         }
     }
@@ -82,7 +82,9 @@ class FloatActivity : ComponentActivity() {
         private var instance: FloatActivity? = null //示例
 
         fun closeFloat() {
-            instance?.finish()
+            if (FloatState.isShowing) {
+                instance?.finish()
+            }
         }
     }
 }
