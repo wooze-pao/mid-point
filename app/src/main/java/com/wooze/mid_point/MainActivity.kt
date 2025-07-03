@@ -1,16 +1,11 @@
 package com.wooze.mid_point
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.wooze.mid_point.ui.HomeScreen
 import com.wooze.mid_point.ui.theme.MidPointTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +14,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MidPointTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                HomeScreen({ openFloatActivity() }, { closeFloatActivity() })
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    fun openFloatActivity() {
+        val intent = Intent(this, FloatActivity::class.java)
+        startActivity(intent)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MidPointTheme {
-        Greeting("Android")
+    fun closeFloatActivity() {
+        FloatActivity.Companion.closeFloat()
     }
 }
+
