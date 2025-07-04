@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.wooze.mid_point.objects.FloatWindowAction.closeFloatActivity
+import com.wooze.mid_point.objects.FloatWindowAction.openFloatActivity
 import com.wooze.mid_point.ui.HomeScreen
 import com.wooze.mid_point.ui.theme.MidPointTheme
 
@@ -14,18 +16,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MidPointTheme {
-                HomeScreen({ openFloatActivity() }, { closeFloatActivity() })
+                HomeScreen({ openFloatActivity(this) }, { closeFloatActivity() })
             }
         }
-    }
-
-    fun openFloatActivity() {
-        val intent = Intent(this, FloatActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun closeFloatActivity() {
-        FloatActivity.Companion.closeFloat()
     }
 }
 

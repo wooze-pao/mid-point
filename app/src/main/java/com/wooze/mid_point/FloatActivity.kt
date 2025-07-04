@@ -100,7 +100,7 @@ class FloatActivity : ComponentActivity() {
     }
 
     companion object {
-        private var instance: FloatActivity? = null //示例
+        private var instance: FloatActivity? = null //实例
 
         fun closeFloat() {
             if (UiState.isShowing) {
