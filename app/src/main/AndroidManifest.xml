@@ -27,8 +27,21 @@
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
-            android:exported="false"
+            android:exported="true"
             />
+        <service
+            android:name=".service.FloatControlTile"
+            android:exported="true"
+            android:label="@string/tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
