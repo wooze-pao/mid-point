@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
-import com.wooze.mid_point.state.FloatState
+import com.wooze.mid_point.state.UiState
 
 @Composable
 fun HomeScreen(openFloat: () -> Unit, closeFloat: () -> Unit) {
@@ -48,7 +48,7 @@ fun HomeScreen(openFloat: () -> Unit, closeFloat: () -> Unit) {
                     "package:${context.packageName}".toUri()
                 )
                 launcher.launch(intent)
-            } else if (!FloatState.isShowing) {
+            } else if (!UiState.isShowing) {
                 openFloat()
             }
         }) { Text("开启悬浮窗") }
