@@ -28,8 +28,19 @@
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
-            android:exported="true"
-            />
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".ShareActivity"
+            android:label="传入中转站"
+            android:launchMode="singleTop"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
         <service
             android:name=".service.FloatControlTile"
             android:exported="true"
