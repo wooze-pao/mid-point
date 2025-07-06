@@ -1,12 +1,11 @@
 package com.wooze.mid_point.state
 
-import android.provider.Settings
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
+import com.wooze.mid_point.data.DragData
 
 
 object UiState {
     // TODO 快速点击状态不同步
     var isShowing = false
-    var isOpen: MutableState<Boolean> = mutableStateOf(false)
+    val dragDataList = mutableStateListOf<DragData>()
 }
