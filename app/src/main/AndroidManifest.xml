@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> <!--悬浮窗权限-->
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!--悬浮窗权限-->
 
     <application
         android:allowBackup="true"
@@ -25,11 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
             android:exported="true">
         </activity>
+
         <activity
             android:name=".ShareActivity"
             android:label="传入中转站"
@@ -41,6 +44,7 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".service.FloatControlTile"
             android:exported="true"

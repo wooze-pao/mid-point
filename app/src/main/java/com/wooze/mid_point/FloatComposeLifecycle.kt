@@ -9,7 +9,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 
 // 自定义生命周期 回答 ->
 // https://stackoverflow.com/questions/79642715/viewtreelifecycleowner-not-found-from-composeview
-class FloatComposeLifecycle : SavedStateRegistryOwner{
+class FloatComposeLifecycle : SavedStateRegistryOwner {
     private var mLifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
     private var mSavedStateRegistryController: SavedStateRegistryController =
         SavedStateRegistryController.create(this)

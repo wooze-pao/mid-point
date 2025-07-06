@@ -120,7 +120,13 @@ fun FloatWindow(viewModel: FloatViewModel) {
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
-                                            DragAndDropTransferData(clipData = ClipData.newUri(context.contentResolver,"file",data.uri), flags = View.DRAG_FLAG_GLOBAL)
+                                            DragAndDropTransferData(
+                                                clipData = ClipData.newUri(
+                                                    context.contentResolver,
+                                                    "file",
+                                                    data.uri
+                                                ), flags = View.DRAG_FLAG_GLOBAL
+                                            )
                                         )
                                     })
                                 }

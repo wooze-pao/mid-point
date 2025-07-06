@@ -23,7 +23,7 @@ class ShareActivity : ComponentActivity() {
 
     @SuppressLint("UnsafeIntentLaunch")
     private fun handleShareIntent(intent: Intent?) {
-        var uri : Uri?
+        var uri: Uri?
         if (intent?.action == Intent.ACTION_SEND) {
             uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
@@ -32,9 +32,9 @@ class ShareActivity : ComponentActivity() {
                 intent.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
             }
             uri?.let { uri ->
-                grantUriPermission(packageName,uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val mimetype = contentResolver.getType(uri)
-                val dragData = DragData(uri,mimetype)
+                val dragData = DragData(uri, mimetype)
                 UiState.dragDataList.add(dragData)
                 if (!UiState.isShowing) {
                     FloatWindowAction.openFloatActivity(this)
