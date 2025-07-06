@@ -9,7 +9,10 @@ import com.wooze.mid_point.state.UiState
 class FloatControlTile : TileService() {
     override fun onClick() {
         super.onClick()
-        FloatWindowAction.toggleFloatWindow(this, Intent.FLAG_ACTIVITY_NEW_TASK) // objects -> FloatWindowAction 中定义
+        FloatWindowAction.toggleFloatWindow(
+            this,
+            Intent.FLAG_ACTIVITY_NEW_TASK
+        ) // objects -> FloatWindowAction 中定义
     }
 
     override fun onStartListening() {
