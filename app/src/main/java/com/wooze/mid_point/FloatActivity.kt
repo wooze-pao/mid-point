@@ -13,20 +13,26 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.FloatWindow
+import com.wooze.mid_point.viewModel.FloatViewModel
 
 
 class FloatActivity : ComponentActivity() {
     private lateinit var floatWindowManager: WindowManager
     private lateinit var floatComposeView: ComposeView
     private lateinit var floatLifecycle: FloatComposeLifecycle
+    private lateinit var viewModel: FloatViewModel
 
+    @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) { // 创建
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(FloatViewModel::class.java)
         instance = this
         moveTaskToBack(true)
         showFloatWindow()
@@ -45,17 +51,18 @@ class FloatActivity : ComponentActivity() {
 
         floatWindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         floatComposeView = ComposeView(this)
-        floatComposeView.setContent {
-            FloatWindow()
-        }
         floatComposeView.setViewTreeLifecycleOwner(floatLifecycle)
         floatComposeView.setViewTreeSavedStateRegistryOwner(floatLifecycle)
+        floatComposeView.setViewTreeViewModelStoreOwner(this)
+        floatComposeView.setContent {
+            FloatWindow(viewModel)
+        }
 
         floatComposeView.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_OUTSIDE -> {
-                        UiState.isOpen.value = false
+                        viewModel.close()
                         return true
                     }
                 }
@@ -87,16 +94,16 @@ class FloatActivity : ComponentActivity() {
     }
 
     fun hideFloatWindow() {
-        if (UiState.isShowing) {
-            floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-            floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
-            floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            floatWindowManager.removeView(floatComposeView)
-            UiState.isShowing = false
-            TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
-        } else {
-            // TODO 对于在未开启状态下的关闭
+        if (!UiState.isShowing) { // 如果悬浮窗没有再显示直接返回
+            return
         }
+        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        floatWindowManager.removeView(floatComposeView)
+        UiState.isShowing = false
+        UiState.dragDataList.clear()
+        TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
     }
 
     companion object {
