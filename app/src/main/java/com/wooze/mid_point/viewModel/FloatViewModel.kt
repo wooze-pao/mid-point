@@ -2,26 +2,52 @@ package com.wooze.mid_point.viewModel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import com.wooze.mid_point.data.WindowState
+import com.wooze.mid_point.data.WindowState.*
 
 class FloatViewModel : ViewModel() {
-    private val _isOpen: MutableState<Boolean> = mutableStateOf<Boolean>(true)
-    val isOpen: State<Boolean> = _isOpen
+    private val _windowState: MutableState<WindowState> = mutableStateOf(WindowState.Hidden)
+    val windowState : State<WindowState> = _windowState
 
-    fun toggleOpen() {
-        _isOpen.value = !_isOpen.value
-    }
-
-    fun close() {
-        if (_isOpen.value) {
-            _isOpen.value = false
+    val targetHeight: State<Dp> = derivedStateOf {
+        when(windowState.value) { // 使用公开的 windowState
+            Hidden -> 75.dp
+            Collapsed -> 75.dp
+            Expand -> 300.dp
         }
     }
 
-    fun open() {
-        if (!_isOpen.value) {
-            _isOpen.value = true
+    val targetWidth: State<Dp> = derivedStateOf {
+        when(windowState.value) { // 使用公开的 windowState
+            Hidden -> 20.dp
+            Collapsed -> 150.dp
+            Expand -> 150.dp
+        }
+    }
+
+    fun hidden() {
+        _windowState.value = WindowState.Hidden
+    }
+
+    fun collapsed() {
+        _windowState.value = WindowState.Collapsed
+    }
+
+    fun expand() {
+        _windowState.value = WindowState.Expand
+    }
+
+    fun toggleState() {
+        _windowState.value = when(_windowState.value) {
+            Hidden -> Collapsed
+            Collapsed -> Expand
+            Expand -> Collapsed
         }
     }
 }
+

@@ -1,5 +1,6 @@
 package com.wooze.mid_point.ui
 
+import android.R.attr.label
 import android.content.ClipData
 import android.util.Log
 import android.view.View
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.wooze.mid_point.data.DragData
+import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
@@ -45,16 +47,16 @@ import com.wooze.mid_point.viewModel.FloatViewModel
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FloatWindow(viewModel: FloatViewModel) {
-    val clicked by viewModel.isOpen
+    val clicked by viewModel.windowState
     val activity = LocalActivity.current
     val context = LocalContext.current
     val height by animateDpAsState(
-        targetValue = if (clicked) 300.dp else 75.dp,
+        targetValue = viewModel.targetHeight.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow), // 弹性 速度
         label = "height"
     )
     val width by animateDpAsState(
-        targetValue = if (clicked) 150.dp else 30.dp,
+        targetValue = viewModel.targetWidth.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         label = "width"
     )
@@ -64,7 +66,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             override fun onStarted(event: DragAndDropEvent) {
                 super.onStarted(event)
                 Log.d("开始", "开始")
-                viewModel.open()
+                viewModel.expand()
             }
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
@@ -83,12 +85,12 @@ fun FloatWindow(viewModel: FloatViewModel) {
 
             override fun onEntered(event: DragAndDropEvent) {
                 super.onEntered(event)
-                viewModel.open()
+                viewModel.expand()
             }
 
             override fun onExited(event: DragAndDropEvent) {
                 super.onEnded(event)
-                viewModel.close()
+                viewModel.expand()
             }
         }
     }
@@ -100,7 +102,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             .width(width)
             .clip(RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp))
             .background(Color.Red)
-            .clickable(onClick = { viewModel.toggleOpen() })
+            .clickable(onClick = { viewModel.toggleState() })
             .dragAndDropTarget(
                 shouldStartDragAndDrop = { return@dragAndDropTarget true },
                 target = dndTarget

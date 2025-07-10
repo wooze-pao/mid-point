@@ -62,7 +62,7 @@ class FloatActivity : ComponentActivity() {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_OUTSIDE -> {
-                        viewModel.close()
+                        viewModel.hidden()
                         return true
                     }
                 }
