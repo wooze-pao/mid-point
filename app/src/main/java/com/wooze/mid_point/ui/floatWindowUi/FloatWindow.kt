@@ -1,17 +1,14 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -42,11 +39,7 @@ import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 
-@SuppressLint("UnusedContentLambdaTargetStateParameter")
-@OptIn(
-    ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class,
-    ExperimentalAnimationApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun FloatWindow(viewModel: FloatViewModel) {
     val activity = LocalActivity.current
@@ -77,9 +70,14 @@ fun FloatWindow(viewModel: FloatViewModel) {
                     // TODO 完成文件的分类给对应的图标
                     val clipData = event.toAndroidDragEvent().clipData
                     val uri = clipData.getItemAt(i).uri
-                    val mem = context.contentResolver.getType(uri)
-                    val dragData = DragData(uri, mem)
-                    UiState.dragDataList.add(dragData)
+                    // 排除有时候拖入两种类型
+                    // TODO 也许以后兼容粘贴板需要改逻辑
+                    Log.d("hahah", "$uri")
+                    if (uri != null) {
+                        val mimetype = context.contentResolver.getType(uri)
+                        val dragData = DragData(uri, mimetype)
+                        UiState.dragDataList.add(dragData)
+                    }
                 }
                 return true
             }
