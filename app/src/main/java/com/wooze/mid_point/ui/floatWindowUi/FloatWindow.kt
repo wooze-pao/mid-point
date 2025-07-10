@@ -1,26 +1,26 @@
-package com.wooze.mid_point.ui
+package com.wooze.mid_point.ui.floatWindowUi
 
-import android.R.attr.label
-import android.content.ClipData
+import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,26 +28,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
-import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.wooze.mid_point.data.DragData
-import com.wooze.mid_point.data.WindowState
+import com.wooze.mid_point.data.WindowState.Collapsed
+import com.wooze.mid_point.data.WindowState.Expand
+import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.state.UiState
-import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
+@SuppressLint("UnusedContentLambdaTargetStateParameter")
+@OptIn(
+    ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun FloatWindow(viewModel: FloatViewModel) {
-    val clicked by viewModel.windowState
     val activity = LocalActivity.current
     val context = LocalContext.current
     val height by animateDpAsState(
@@ -66,7 +67,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             override fun onStarted(event: DragAndDropEvent) {
                 super.onStarted(event)
                 Log.d("开始", "开始")
-                viewModel.expand()
+                viewModel.collapsed()
             }
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
@@ -85,12 +86,12 @@ fun FloatWindow(viewModel: FloatViewModel) {
 
             override fun onEntered(event: DragAndDropEvent) {
                 super.onEntered(event)
-                viewModel.expand()
+                viewModel.collapsed()
             }
 
             override fun onExited(event: DragAndDropEvent) {
                 super.onEnded(event)
-                viewModel.expand()
+                viewModel.hidden()
             }
         }
     }
@@ -100,51 +101,37 @@ fun FloatWindow(viewModel: FloatViewModel) {
         modifier = Modifier
             .height(height)
             .width(width)
-            .clip(RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp))
-            .background(Color.Red)
-            .clickable(onClick = { viewModel.toggleState() })
+            .clip(RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp))
+            .background(Color.LightGray)
+            .clickable(
+                onClick = { viewModel.toggleState() }, indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            )
             .dragAndDropTarget(
                 shouldStartDragAndDrop = { return@dragAndDropTarget true },
                 target = dndTarget
             )
 
     ) {
-        LazyColumn {
-            UiState.dragDataList.forEach { data ->
-                item {// TODO 完善悬浮窗
-                    if (data.mimetype != null) {
-                        Box(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .fillMaxWidth()
-                                .height(100.dp)
-                                .clip(RoundedCornerShape(10))
-                                .dragAndDropSource {
-                                    detectTapGestures(onLongPress = {
-                                        startTransfer(
-                                            DragAndDropTransferData(
-                                                clipData = ClipData.newUri(
-                                                    context.contentResolver,
-                                                    "file",
-                                                    data.uri
-                                                ), flags = View.DRAG_FLAG_GLOBAL
-                                            )
-                                        )
-                                    })
-                                }
-                        ) {
-                            GlideImage(
-                                model = typeCategory(data),
-                                contentDescription = "picture",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
+        AnimatedContent(
+            targetState = viewModel.windowState.value,
+            transitionSpec = { fadeIn().togetherWith(fadeOut()) }
+        ) { state ->
+            when (state) {
+                Hidden -> {}
+                Collapsed -> {
+                    CollapsedMode(context, viewModel)
+                }
+
+                Expand -> {
+                    ExpandMode(context)
                 }
             }
         }
+
     }
 
 }
+
+
 
