@@ -16,15 +16,15 @@ class FloatViewModel : ViewModel() {
     val windowState : State<WindowState> = _windowState
 
     val targetHeight: State<Dp> = derivedStateOf {
-        when(windowState.value) { // 使用公开的 windowState
-            Hidden -> 100.dp
-            Collapsed -> 100.dp
+        when(windowState.value) {
+            Hidden -> 120.dp
+            Collapsed -> 120.dp
             Expand -> 300.dp
         }
     }
 
     val targetWidth: State<Dp> = derivedStateOf {
-        when(windowState.value) { // 使用公开的 windowState
+        when(windowState.value) {
             Hidden -> 20.dp
             Collapsed -> 150.dp
             Expand -> 150.dp
