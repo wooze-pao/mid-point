@@ -19,7 +19,7 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
-import com.wooze.mid_point.ui.FloatWindow
+import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 
