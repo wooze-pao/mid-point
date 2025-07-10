@@ -53,12 +53,7 @@ fun ExpandMode (context: Context) {
                                 })
                             }
                     ) {
-                        GlideImage(
-                            model = typeCategory(data),
-                            contentDescription = "picture",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
+                        typeCategory(data)
                     }
                 }
             }
