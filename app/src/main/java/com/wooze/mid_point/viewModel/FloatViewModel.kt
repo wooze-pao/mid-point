@@ -11,7 +11,8 @@ import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.data.WindowState.*
 
 class FloatViewModel : ViewModel() {
-    private val _windowState: MutableState<WindowState> = mutableStateOf(WindowState.Hidden)
+    // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
+    private val _windowState: MutableState<WindowState> = mutableStateOf(Hidden)
     val windowState : State<WindowState> = _windowState
 
     val targetHeight: State<Dp> = derivedStateOf {
@@ -31,15 +32,15 @@ class FloatViewModel : ViewModel() {
     }
 
     fun hidden() {
-        _windowState.value = WindowState.Hidden
+        _windowState.value = Hidden
     }
 
     fun collapsed() {
-        _windowState.value = WindowState.Collapsed
+        _windowState.value = Collapsed
     }
 
     fun expand() {
-        _windowState.value = WindowState.Expand
+        _windowState.value = Expand
     }
 
     fun toggleState() {
