@@ -14,19 +14,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun CollapsedMode (context: Context,viewModel: FloatViewModel) {
+fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
     Box(
         modifier = Modifier
             .padding(10.dp)
@@ -58,9 +64,21 @@ fun CollapsedMode (context: Context,viewModel: FloatViewModel) {
             },
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("拖出以放置")
-            Text("拖入以保存")
+        if (UiState.dragDataList.isNotEmpty()) {
+            val lastData = UiState.dragDataList.last()
+            var show by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) {
+                delay(100)  // 给予延时再显示 以防太快图片比例错误
+                show = true
+            }
+            if (show) {
+                typeCategory(lastData)
+            }
+        } else {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("拖出以放置")
+                Text("拖入以保存")
+            }
         }
     }
 }
