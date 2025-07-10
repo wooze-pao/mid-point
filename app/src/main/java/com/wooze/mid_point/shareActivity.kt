@@ -36,7 +36,23 @@ class ShareActivity : ComponentActivity() {
                 val mimetype = contentResolver.getType(uri)
                 val dragData = DragData(uri, mimetype)
                 UiState.dragDataList.add(dragData)
-                if (!UiState.isShowing) {
+                FloatWindowAction.openFloatActivity(this)
+            }
+        }
+        else if (intent?.action == Intent.ACTION_SEND_MULTIPLE) {
+            val uriList: List<Uri>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+            }
+
+            uriList?.let {
+                it.forEach {uri ->
+                    grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    val mimetype = contentResolver.getType(uri)
+                    val dragData = DragData(uri, mimetype)
+                    UiState.dragDataList.add(dragData)
                     FloatWindowAction.openFloatActivity(this)
                 }
             }
