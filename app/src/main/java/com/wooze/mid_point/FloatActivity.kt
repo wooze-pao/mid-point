@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
@@ -21,6 +22,8 @@ import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class FloatActivity : ComponentActivity() {
@@ -34,8 +37,11 @@ class FloatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FloatViewModel::class.java)
         instance = this
-        moveTaskToBack(true)
         showFloatWindow()
+        lifecycle.coroutineScope.launch {
+            delay(100) // 给予一点延时显示，防止系统销毁（配合excludeFromRecents）
+            moveTaskToBack(true)
+        }
     }
 
     override fun onDestroy() { // 清除

@@ -1,5 +1,8 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
@@ -64,12 +67,14 @@ fun FloatWindow(viewModel: FloatViewModel) {
             }
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
-                val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
+           val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
                 val dataCount = event.toAndroidDragEvent().clipData.itemCount
                 for (i in 0..dataCount - 1) {
                     // TODO 完成文件的分类给对应的图标
                     val clipData = event.toAndroidDragEvent().clipData
                     val uri = clipData.getItemAt(i).uri
+                    Log.d("urihaha","$uri")
+//                    context.grantUriPermission(context.packageName,uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     // 排除有时候拖入两种类型
                     // TODO 也许以后兼容粘贴板需要改逻辑
                     Log.d("hahah", "$uri")

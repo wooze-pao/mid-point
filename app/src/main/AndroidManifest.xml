@@ -30,14 +30,16 @@
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
-            android:exported="true"
-            android:theme="@style/TranslucentStyle">
+            android:excludeFromRecents="true"
+            android:theme="@style/TranslucentStyle"
+            android:exported="false"
+            >
         </activity>
 
         <activity
             android:name=".ShareActivity"
             android:label="传入中转站"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true"
             android:theme="@style/TranslucentStyle">
             <intent-filter>
