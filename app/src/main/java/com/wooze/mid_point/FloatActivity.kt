@@ -108,7 +108,7 @@ class FloatActivity : ComponentActivity() {
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         floatWindowManager.removeView(floatComposeView)
         UiState.isShowing = false
-        UiState.dragDataList.clear()
+        viewModel.resetFloatData()
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
     }
 

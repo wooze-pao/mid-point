@@ -7,8 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.data.WindowState.*
+import com.wooze.mid_point.state.UiState
 
 class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
@@ -29,6 +31,14 @@ class FloatViewModel : ViewModel() {
             Collapsed -> 150.dp
             Expand -> 150.dp
         }
+    }
+
+    fun resetFloatData () {
+        UiState.dragDataList.clear()
+    }
+
+    fun addFloatData (data: DragData) {
+        UiState.dragDataList.add(data)
     }
 
     fun hidden() {

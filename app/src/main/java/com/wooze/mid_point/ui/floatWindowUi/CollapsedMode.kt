@@ -1,5 +1,6 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 import kotlinx.coroutines.delay
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
@@ -37,6 +40,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
         modifier = Modifier
             .padding(10.dp)
             .fillMaxSize()
+            .requiredWidth(130.dp)
             .clip(RoundedCornerShape(20))
             .background(Color.Gray)
             .dragAndDropSource {
@@ -66,14 +70,8 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
     ) {
         if (UiState.dragDataList.isNotEmpty()) {
             val lastData = UiState.dragDataList.last()
-            var show by remember { mutableStateOf(false) }
-            LaunchedEffect(Unit) {
-                delay(100)  // 给予延时再显示 以防太快图片比例错误
-                show = true
-            }
-            if (show) {
                 typeCategory(lastData)
-            }
+
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("拖出以放置")

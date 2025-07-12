@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -20,6 +21,7 @@ import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -73,11 +75,8 @@ fun FloatWindow(viewModel: FloatViewModel) {
                     // TODO 完成文件的分类给对应的图标
                     val clipData = event.toAndroidDragEvent().clipData
                     val uri = clipData.getItemAt(i).uri
-                    Log.d("urihaha","$uri")
-//                    context.grantUriPermission(context.packageName,uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     // 排除有时候拖入两种类型
                     // TODO 也许以后兼容粘贴板需要改逻辑
-                    Log.d("hahah", "$uri")
                     if (uri != null) {
                         val mimetype = context.contentResolver.getType(uri)
                         val dragData = DragData(uri, mimetype)
@@ -118,10 +117,6 @@ fun FloatWindow(viewModel: FloatViewModel) {
     ) {
         AnimatedContent(
             targetState = viewModel.windowState.value,
-            transitionSpec = {
-                (fadeIn(animationSpec = tween(500, delayMillis = 230)))
-                    .togetherWith(fadeOut(animationSpec = tween(90)))
-            }
         ) { state ->
             when (state) {
                 Hidden -> {}
@@ -130,7 +125,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
                 }
 
                 Expand -> {
-                    ExpandMode(context)
+                    ExpandMode(context,viewModel)
                 }
             }
         }
