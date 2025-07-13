@@ -30,7 +30,8 @@
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
+            android:taskAffinity="com.wooze.mid_point.floatWindow"
             android:theme="@style/TranslucentStyle"
             android:exported="false"
             >

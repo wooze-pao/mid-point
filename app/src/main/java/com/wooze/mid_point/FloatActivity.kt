@@ -11,7 +11,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.Text
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.sp
+import androidx.core.app.ServiceCompat.startForeground
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.setViewTreeLifecycleOwner

@@ -1,12 +1,15 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +20,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -28,11 +35,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +54,7 @@ import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun ExpandMode(context: Context, viewModel: FloatViewModel) {
@@ -101,11 +112,15 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
             UiState.dragDataList.forEach { data ->
                 item {// TODO 完善悬浮窗
                     if (data.mimetype != null) {
+                        val isSelected by derivedStateOf { viewModel.selectList.contains(data) }
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(100.dp)
                                 .clip(RoundedCornerShape(20))
+                                .background(if (!isSelected) Color(0x80000000) else Color(
+                                    0xFF2196F3
+                                ))
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
@@ -118,10 +133,40 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                                 flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
                                             )
                                         )
+                                    }, onTap = {
+                                        Log.d("haha","点击")
+                                        if (viewModel.selectMode.value && !isSelected) {
+                                            viewModel.selectList.add(data)
+                                        } else if (isSelected) {
+                                            viewModel.selectList.remove(data)
+                                        }
                                     })
                                 }
                         ) {
                             typeCategory(data)
+                            if (viewModel.selectMode.value) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .size(40.dp)
+                                        .border(
+                                            width = 2.dp,
+                                            color = Color.White,
+                                            shape = RoundedCornerShape(15.dp)
+                                        )
+                                        .background(
+                                            if (!isSelected) Color(0x80000000) else Color(
+                                                0xFF2196F3
+                                            )
+                                        )
+                                        //Color(0xFF2196F3)
+                                        .align(alignment = Alignment.TopEnd)
+                                        .wrapContentSize(Alignment.Center),
+                                ) {
+                                    Icon(Icons.Filled.Check, contentDescription = null)
+                                }
+                            }
                         }
                     }
                 }
@@ -144,10 +189,18 @@ fun DropMenu(viewModel: FloatViewModel) {
             onClick = {
                 var share = Intent()
                 var uriArrays = ArrayList<Uri>()
-                for (i in 0..UiState.dragDataList.size - 1) {
-                    val uri = UiState.dragDataList[i].uri
-                    uriArrays.add(uri)
+                if (viewModel.selectMode.value) {
+                    for (i in 0..viewModel.selectList.size - 1) {
+                        val uri = viewModel.selectList[i].uri
+                        uriArrays.add(uri)
+                    }
+                } else {
+                    for (i in 0..UiState.dragDataList.size - 1) {
+                        val uri = UiState.dragDataList[i].uri
+                        uriArrays.add(uri)
+                    }
                 }
+
 
                 if (uriArrays.size == 1) {
                     share = Intent(Intent.ACTION_SEND)
@@ -168,7 +221,13 @@ fun DropMenu(viewModel: FloatViewModel) {
         )
         DropdownMenuItem(
             text = { Text("清空中转站") },
-            onClick = { viewModel.resetFloatData() },
+            onClick = { viewModel.resetFloatData()
+                viewModel.toggleMenu()},
+        )
+        DropdownMenuItem(
+            text = { Text("多选模式") },
+            onClick = { viewModel.toggleSelectMode()
+                viewModel.toggleMenu()},
         )
     }
 }
