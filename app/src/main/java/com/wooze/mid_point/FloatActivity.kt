@@ -35,7 +35,7 @@ class FloatActivity : ComponentActivity() {
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) { // 创建
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FloatViewModel::class.java)
+        viewModel = FloatViewModel()
         instance = this
         showFloatWindow()
         lifecycle.coroutineScope.launch {
@@ -93,21 +93,21 @@ class FloatActivity : ComponentActivity() {
         params.y = 300
 
         floatWindowManager.addView(floatComposeView, params)
-        UiState.isShowing = true  // 设定为true
+        UiState.isShowing.value = true  // 设定为true
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
     fun hideFloatWindow() {
-        if (!UiState.isShowing) { // 如果悬浮窗没有再显示直接返回
+        if (!UiState.isShowing.value) { // 如果悬浮窗没有再显示直接返回
             return
         }
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         floatWindowManager.removeView(floatComposeView)
-        UiState.isShowing = false
+        UiState.isShowing.value = false
         viewModel.resetFloatData()
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
     }
@@ -116,7 +116,7 @@ class FloatActivity : ComponentActivity() {
         private var instance: FloatActivity? = null //实例
 
         fun closeFloat() {
-            if (UiState.isShowing) {
+            if (UiState.isShowing.value) {
                 instance?.finish()
             }
         }

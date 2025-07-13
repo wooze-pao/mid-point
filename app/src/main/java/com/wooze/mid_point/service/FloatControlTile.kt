@@ -17,7 +17,7 @@ class FloatControlTile : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        qsTile.state = if (UiState.isShowing) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+        qsTile.state = if (UiState.isShowing.value) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         qsTile.updateTile()
     }
 }

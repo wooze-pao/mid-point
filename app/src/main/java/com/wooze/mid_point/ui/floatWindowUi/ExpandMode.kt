@@ -2,7 +2,10 @@ package com.wooze.mid_point.ui.floatWindowUi
 
 import android.content.ClipData
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.View
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
@@ -36,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -75,7 +79,6 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                var expanded by remember { mutableStateOf(false) }
                 IconButton(onClick = { FloatWindowAction.closeFloatActivity()}) {
                     Icon(painterResource(R.drawable.close_round), contentDescription = null)
                 }
@@ -89,27 +92,10 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
                 ) {
                     Text("${UiState.dragDataList.size}")
                 }
-                IconButton(onClick = {expanded = true},) {
+                IconButton(onClick = {viewModel.toggleMenu()},) {
                     Icon(painterResource(R.drawable.menu),contentDescription = null)
                 }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(300.dp)
-                ) {
-                    repeat(10) {
-                        DropdownMenuItem(
-                            text = { Text("分享到 $it") },
-                            onClick = {
-                                // 选中逻辑
-                                viewModel.resetFloatData()
-                                expanded = false
-                            }
-                        )
-                    }
-                }
+                DropMenu(viewModel)
             }
         }
 
@@ -151,3 +137,45 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
     }
 }
 
+@Composable
+fun DropMenu (viewModel: FloatViewModel) {
+    val context = LocalContext.current
+    DropdownMenu(
+        expanded = viewModel.menuExpanded,
+        onDismissRequest = {viewModel.toggleMenu()},
+        modifier = Modifier.width(150.dp),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        DropdownMenuItem(
+            text = { Text("分享到") },
+            onClick = {
+                var share = Intent()
+                var uriArrays = ArrayList<Uri>()
+                for (i in 0..UiState.dragDataList.size - 1) {
+                    val uri = UiState.dragDataList[i].uri
+                    uriArrays.add(uri)
+                }
+
+                if (uriArrays.size == 1) {
+                    share = Intent(Intent.ACTION_SEND)
+                    share.putExtra(Intent.EXTRA_STREAM,uriArrays[0])
+                } else if (uriArrays.size > 1){
+                    share = Intent(Intent.ACTION_SEND_MULTIPLE)
+                    share.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrays)
+                } else {
+                    viewModel.toggleMenu()
+                    return@DropdownMenuItem
+                }
+                share.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                share.type = "image/*"
+                viewModel.toggleMenu()
+                viewModel.hidden()
+                context.startActivity(Intent.createChooser(share,null))
+            },
+        )
+        DropdownMenuItem(
+            text = { Text("清空中转站") },
+            onClick = {viewModel.resetFloatData()},
+        )
+    }
+}

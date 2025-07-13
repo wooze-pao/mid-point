@@ -7,7 +7,7 @@ import com.wooze.mid_point.state.UiState
 
 object FloatWindowAction {
     fun toggleFloatWindow(context: Context, flag: Int? = null) {
-        if (UiState.isShowing) {
+        if (UiState.isShowing.value) {
             closeFloatActivity()
         } else {
             openFloatActivity(context, flag)
@@ -15,7 +15,7 @@ object FloatWindowAction {
     }
 
     fun openFloatActivity(context: Context, flag: Int? = null) {
-        if (!UiState.isShowing) {
+        if (!UiState.isShowing.value) {
             val intent = Intent(context, FloatActivity::class.java)
             if (flag != null) {
                 intent.addFlags(flag)
@@ -25,7 +25,7 @@ object FloatWindowAction {
     }
 
     fun closeFloatActivity() {
-        if (UiState.isShowing) {
+        if (UiState.isShowing.value) {
             FloatActivity.Companion.closeFloat()
         }
     }

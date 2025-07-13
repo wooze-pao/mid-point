@@ -3,7 +3,9 @@ package com.wooze.mid_point.viewModel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -16,6 +18,8 @@ class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
     private val _windowState: MutableState<WindowState> = mutableStateOf(Hidden)
     val windowState : State<WindowState> = _windowState
+
+    var menuExpanded : Boolean by mutableStateOf(false)
 
     val targetHeight: State<Dp> = derivedStateOf {
         when(windowState.value) {
@@ -33,6 +37,10 @@ class FloatViewModel : ViewModel() {
         }
     }
 
+
+    fun toggleMenu () {
+        menuExpanded = !menuExpanded
+    }
     fun resetFloatData () {
         UiState.dragDataList.clear()
     }
