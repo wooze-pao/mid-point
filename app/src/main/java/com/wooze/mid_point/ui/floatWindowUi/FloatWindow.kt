@@ -1,20 +1,14 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +16,6 @@ import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -70,7 +63,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             }
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
-           val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
+                val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
                 val dataCount = event.toAndroidDragEvent().clipData.itemCount
                 for (i in 0..dataCount - 1) {
                     // TODO 完成文件的分类给对应的图标
@@ -118,7 +111,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
     ) {
         AnimatedContent(
             targetState = viewModel.windowState.value,
-            transitionSpec = { fadeIn().togetherWith(fadeOut())  }
+            transitionSpec = { fadeIn().togetherWith(fadeOut()) }
         ) { state ->
             when (state) {
                 Hidden -> {}
@@ -127,7 +120,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
                 }
 
                 Expand -> {
-                    ExpandMode(context,viewModel)
+                    ExpandMode(context, viewModel)
                 }
             }
         }

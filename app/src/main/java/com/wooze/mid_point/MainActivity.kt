@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.ViewModel
 import com.wooze.mid_point.objects.FloatWindowAction.closeFloatActivity
 import com.wooze.mid_point.objects.FloatWindowAction.openFloatActivity
 import com.wooze.mid_point.ui.HomeScreen

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -30,10 +28,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
@@ -43,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.wooze.mid_point.R
 import com.wooze.mid_point.objects.FloatWindowAction
@@ -53,7 +46,7 @@ import com.wooze.mid_point.viewModel.FloatViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun ExpandMode(context: Context,viewModel: FloatViewModel) {
+fun ExpandMode(context: Context, viewModel: FloatViewModel) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
@@ -79,7 +72,7 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { FloatWindowAction.closeFloatActivity()}) {
+                IconButton(onClick = { FloatWindowAction.closeFloatActivity() }) {
                     Icon(painterResource(R.drawable.close_round), contentDescription = null)
                 }
                 Box(
@@ -92,8 +85,8 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
                 ) {
                     Text("${UiState.dragDataList.size}")
                 }
-                IconButton(onClick = {viewModel.toggleMenu()},) {
-                    Icon(painterResource(R.drawable.menu),contentDescription = null)
+                IconButton(onClick = { viewModel.toggleMenu() }) {
+                    Icon(painterResource(R.drawable.menu), contentDescription = null)
                 }
                 DropMenu(viewModel)
             }
@@ -138,11 +131,11 @@ fun ExpandMode(context: Context,viewModel: FloatViewModel) {
 }
 
 @Composable
-fun DropMenu (viewModel: FloatViewModel) {
+fun DropMenu(viewModel: FloatViewModel) {
     val context = LocalContext.current
     DropdownMenu(
         expanded = viewModel.menuExpanded,
-        onDismissRequest = {viewModel.toggleMenu()},
+        onDismissRequest = { viewModel.toggleMenu() },
         modifier = Modifier.width(150.dp),
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -158,8 +151,8 @@ fun DropMenu (viewModel: FloatViewModel) {
 
                 if (uriArrays.size == 1) {
                     share = Intent(Intent.ACTION_SEND)
-                    share.putExtra(Intent.EXTRA_STREAM,uriArrays[0])
-                } else if (uriArrays.size > 1){
+                    share.putExtra(Intent.EXTRA_STREAM, uriArrays[0])
+                } else if (uriArrays.size > 1) {
                     share = Intent(Intent.ACTION_SEND_MULTIPLE)
                     share.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrays)
                 } else {
@@ -170,12 +163,12 @@ fun DropMenu (viewModel: FloatViewModel) {
                 share.type = "image/*"
                 viewModel.toggleMenu()
                 viewModel.hidden()
-                context.startActivity(Intent.createChooser(share,null))
+                context.startActivity(Intent.createChooser(share, null))
             },
         )
         DropdownMenuItem(
             text = { Text("清空中转站") },
-            onClick = {viewModel.resetFloatData()},
+            onClick = { viewModel.resetFloatData() },
         )
     }
 }

@@ -11,18 +11,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.data.WindowState
-import com.wooze.mid_point.data.WindowState.*
+import com.wooze.mid_point.data.WindowState.Collapsed
+import com.wooze.mid_point.data.WindowState.Expand
+import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.state.UiState
 
 class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
     private val _windowState: MutableState<WindowState> = mutableStateOf(Hidden)
-    val windowState : State<WindowState> = _windowState
+    val windowState: State<WindowState> = _windowState
 
-    var menuExpanded : Boolean by mutableStateOf(false)
+    var menuExpanded: Boolean by mutableStateOf(false)
 
     val targetHeight: State<Dp> = derivedStateOf {
-        when(windowState.value) {
+        when (windowState.value) {
             Hidden -> 120.dp
             Collapsed -> 120.dp
             Expand -> 300.dp
@@ -30,7 +32,7 @@ class FloatViewModel : ViewModel() {
     }
 
     val targetWidth: State<Dp> = derivedStateOf {
-        when(windowState.value) {
+        when (windowState.value) {
             Hidden -> 20.dp
             Collapsed -> 150.dp
             Expand -> 150.dp
@@ -38,14 +40,15 @@ class FloatViewModel : ViewModel() {
     }
 
 
-    fun toggleMenu () {
+    fun toggleMenu() {
         menuExpanded = !menuExpanded
     }
-    fun resetFloatData () {
+
+    fun resetFloatData() {
         UiState.dragDataList.clear()
     }
 
-    fun addFloatData (data: DragData) {
+    fun addFloatData(data: DragData) {
         UiState.dragDataList.add(data)
     }
 
@@ -62,7 +65,7 @@ class FloatViewModel : ViewModel() {
     }
 
     fun toggleState() {
-        _windowState.value = when(_windowState.value) {
+        _windowState.value = when (_windowState.value) {
             Hidden -> Collapsed
             Collapsed -> Expand
             Expand -> Collapsed

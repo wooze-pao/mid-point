@@ -16,11 +16,6 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
@@ -30,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
-import kotlinx.coroutines.delay
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -70,7 +64,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
     ) {
         if (UiState.dragDataList.isNotEmpty()) {
             val lastData = UiState.dragDataList.last()
-                typeCategory(lastData)
+            typeCategory(lastData)
 
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
