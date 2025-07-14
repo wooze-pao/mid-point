@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.tools.DataTools
 
 class ShareActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +23,9 @@ class ShareActivity : ComponentActivity() {
 
 
     @SuppressLint("UnsafeIntentLaunch")
-    private fun handleShareIntent(intent: Intent?) {
+    private fun handleShareIntent(intent: Intent) {
         var uri: Uri?
-        if (intent?.action == Intent.ACTION_SEND) {
+        if (intent.action == Intent.ACTION_SEND) {
             uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
             } else {
@@ -32,11 +33,7 @@ class ShareActivity : ComponentActivity() {
                 intent.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
             }
             uri?.let { uri ->
-                grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val mimetype = contentResolver.getType(uri)
-                val dragData = DragData(uri, mimetype)
-                UiState.dragDataList.add(dragData)
-                FloatWindowAction.openFloatActivity(this)
+                DataTools.extractAndSave(uri,this)
             }
         } else if (intent?.action == Intent.ACTION_SEND_MULTIPLE) {
             val uriList: List<Uri>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -46,14 +43,8 @@ class ShareActivity : ComponentActivity() {
                 intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
             }
 
-            uriList?.let {
-                it.forEach { uri ->
-                    grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    val mimetype = contentResolver.getType(uri)
-                    val dragData = DragData(uri, mimetype)
-                    UiState.dragDataList.add(dragData)
-                    FloatWindowAction.openFloatActivity(this)
-                }
+            uriList?.let {uri ->
+                DataTools.extractAndSave(uri,this)
             }
         }
     }

@@ -31,11 +31,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.data.WindowState.Collapsed
 import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
-import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 
@@ -65,19 +64,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
                 val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
-                val dataCount = event.toAndroidDragEvent().clipData.itemCount
-                for (i in 0..dataCount - 1) {
-                    // TODO 完成文件的分类给对应的图标
-                    val clipData = event.toAndroidDragEvent().clipData
-                    val uri = clipData.getItemAt(i).uri
-                    // 排除有时候拖入两种类型
-                    // TODO 也许以后兼容粘贴板需要改逻辑
-                    if (uri != null) {
-                        val mimetype = context.contentResolver.getType(uri)
-                        val dragData = DragData(uri, mimetype)
-                        UiState.dragDataList.add(dragData)
-                    }
-                }
+                DataTools.extractAndSave(event, context)
                 return true
             }
 
