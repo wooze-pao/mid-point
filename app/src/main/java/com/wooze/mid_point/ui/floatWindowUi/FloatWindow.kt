@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -113,7 +112,11 @@ fun FloatWindow(viewModel: FloatViewModel) {
     ) {
         AnimatedContent(
             targetState = viewModel.windowState.value,
-            transitionSpec = { fadeIn(tween(durationMillis = 200,delayMillis = 400)).togetherWith(fadeOut()) }
+            transitionSpec = {
+                fadeIn(tween(durationMillis = 200, delayMillis = 400)).togetherWith(
+                    fadeOut()
+                )
+            }
         ) { state ->
             when (state) {
                 Hidden -> {}
