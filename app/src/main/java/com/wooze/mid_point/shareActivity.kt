@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import com.wooze.mid_point.data.DragData
-import com.wooze.mid_point.objects.FloatWindowAction
+import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
 
 class ShareActivity : ComponentActivity() {

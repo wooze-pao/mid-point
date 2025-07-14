@@ -1,4 +1,4 @@
-package com.wooze.mid_point.objects
+package com.wooze.mid_point.tools
 
 import android.content.Context
 import android.content.Intent

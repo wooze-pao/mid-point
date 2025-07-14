@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.wooze.mid_point.R
-import com.wooze.mid_point.objects.FloatWindowAction
+import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel

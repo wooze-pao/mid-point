@@ -3,7 +3,7 @@ package com.wooze.mid_point.service
 import android.content.Intent
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.wooze.mid_point.objects.FloatWindowAction
+import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
 
 class FloatControlTile : TileService() {

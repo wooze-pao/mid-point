@@ -6,8 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wooze.mid_point.objects.FloatWindowAction.closeFloatActivity
-import com.wooze.mid_point.objects.FloatWindowAction.openFloatActivity
+import com.wooze.mid_point.tools.FloatWindowAction.closeFloatActivity
+import com.wooze.mid_point.tools.FloatWindowAction.openFloatActivity
 import com.wooze.mid_point.ui.homeScreenUi.HomeScreen
 import com.wooze.mid_point.ui.theme.MidPointTheme
 import com.wooze.mid_point.viewModel.MainViewModel
