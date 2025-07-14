@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.wooze.mid_point"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 35
         versionCode = 2
         versionName = "demo - 1.0"

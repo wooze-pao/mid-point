@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">midPoint</string>
     <string name="tile_label">中转站</string>
+    <string name="short_label">开启中转站</string>
 </resources>
