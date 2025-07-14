@@ -1,6 +1,7 @@
 ## 关于
 
-⭐中点站 - 安卓悬浮窗文件中转站/暂存站 
+<img src="pictures/app_icon.png"/>
+<p>⭐中点站 - 安卓悬浮窗文件中转站/暂存站 </p>
 
 目前未开发完成.. demo版 下面是一些截图
 
@@ -12,7 +13,7 @@
 
 启动流程图
 
-![流程图](https://github.com/wooze-pao/mid-point/blob/main/pictures/pp1.png)
+![流程图](https://github.com/wooze-pao/mid-point/blob/main/pictures/p1.png)
 
 为什么不用Service作为悬浮窗载体？ 
 
