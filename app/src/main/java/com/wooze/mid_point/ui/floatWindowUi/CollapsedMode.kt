@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
     Box(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxSize()
+            .requiredHeight(100.dp)
             .requiredWidth(130.dp)
             .clip(RoundedCornerShape(20))
             .background(Color.Gray)
