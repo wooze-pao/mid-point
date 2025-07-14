@@ -43,6 +43,14 @@ fun typeCategory(data: DragData) {
                 FileWithName(context, data, "音频文件", R.drawable.icon_color_audio)
             }
 
+            data.mimetype.startsWith("text/") -> {
+                FileWithName(context, data, "文本类文件", R.drawable.icon_color__doc)
+            }
+
+            data.mimetype.startsWith("application/") -> {
+                FileWithName(context, data, "压缩类文件", R.drawable.icon_color_zip)
+            }
+
 //            data.mimetype.startsWith("application/") -> {
 //                when (data.mimetype) {
 //                    "application/zip" -> FileWithName(context,data,"压缩文件",R.drawable.icon_color_file)
@@ -50,16 +58,7 @@ fun typeCategory(data: DragData) {
 //            }
 
             else -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Column {
-                        GlideImage(
-                            model = R.drawable.icon_color_audio,
-                            contentDescription = "audio",
-                            contentScale = ContentScale.Crop
-                        )
-                        Text("音频文件")
-                    }
-                }
+                FileWithName(context, data, "未知文件", R.drawable.icon_color_bar)
             }
 
         }
@@ -83,7 +82,7 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
             GlideImage(
                 model = icon,
                 contentDescription = description,
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(40.dp)
             )
             var name: String = description
             val cursor = context.contentResolver.query(
@@ -99,7 +98,18 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
                 }
             }
             Text(description)
-            Text("$name", fontSize = 10.sp)
+            Text(formatFileName(name), fontSize = 10.sp)
         }
     }
+}
+
+fun formatFileName(fileName: String, maxWord: Int = 20): String {
+    if (fileName.length <= maxWord) {
+        return fileName
+    }
+    val dotIndex = fileName.lastIndexOf(".")
+    val afterDotString = fileName.substring(dotIndex)
+    val afterDotLength = afterDotString.length
+    val name = fileName.take(maxWord - afterDotLength - "..".length)
+    return "$name..$afterDotString"
 }
