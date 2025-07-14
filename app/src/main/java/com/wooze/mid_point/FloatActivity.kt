@@ -6,20 +6,26 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
 import android.service.quicksettings.TileService
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ServiceCompat.startForeground
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
@@ -33,12 +39,11 @@ class FloatActivity : ComponentActivity() {
     private lateinit var floatWindowManager: WindowManager
     private lateinit var floatComposeView: ComposeView
     private lateinit var floatLifecycle: FloatComposeLifecycle
-    private lateinit var viewModel: FloatViewModel
+    private val viewModel by viewModels<FloatViewModel>()
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) { // 创建
         super.onCreate(savedInstanceState)
-        viewModel = FloatViewModel()
         instance = this
         showFloatWindow()
         lifecycle.coroutineScope.launch {
@@ -72,6 +77,7 @@ class FloatActivity : ComponentActivity() {
                 when (event?.action) {
                     MotionEvent.ACTION_OUTSIDE -> {
                         viewModel.hidden()
+                        Log.d("开始2","开始2")
                         return true
                     }
                 }
