@@ -118,9 +118,11 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                 .fillMaxWidth()
                                 .height(100.dp)
                                 .clip(RoundedCornerShape(20))
-                                .background(if (!isSelected) Color(0x80000000) else Color(
-                                    0xFF2196F3
-                                ))
+                                .background(
+                                    if (!isSelected) Color(0x80000000) else Color(
+                                        0xFF2196F3
+                                    )
+                                )
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
@@ -134,7 +136,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                             )
                                         )
                                     }, onTap = {
-                                        Log.d("haha","点击")
+                                        Log.d("haha", "点击")
                                         if (viewModel.selectMode.value && !isSelected) {
                                             viewModel.selectList.add(data)
                                         } else if (isSelected) {
@@ -221,13 +223,17 @@ fun DropMenu(viewModel: FloatViewModel) {
         )
         DropdownMenuItem(
             text = { Text("清空中转站") },
-            onClick = { viewModel.resetFloatData()
-                viewModel.toggleMenu()},
+            onClick = {
+                viewModel.resetFloatData()
+                viewModel.toggleMenu()
+            },
         )
         DropdownMenuItem(
             text = { Text("多选模式") },
-            onClick = { viewModel.toggleSelectMode()
-                viewModel.toggleMenu()},
+            onClick = {
+                viewModel.toggleSelectMode()
+                viewModel.toggleMenu()
+            },
         )
     }
 }
