@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,13 +45,7 @@ fun typeCategory(data: DragData) {
             }
 
             data.mimetype.startsWith("text/") -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White)
-                ) {
-                    data.plainText?.let { Text(it) }
-                }
+                FullText(data)
             }
 
             data.mimetype.startsWith("application/") -> {
@@ -72,13 +67,24 @@ fun typeCategory(data: DragData) {
     }
 }
 
+@Composable
+fun FullText(data: DragData) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        data.plainText?.let { Text(it, modifier = Modifier.padding(8.dp), maxLines = 5) }
+    }
+}
+
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun FileWithName(context: Context, data: DragData, description: String, icon: Int) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Gray)
+            .background(Color.White)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

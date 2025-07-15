@@ -46,13 +46,15 @@ import com.wooze.mid_point.viewModel.FloatViewModel
 fun FloatWindow(viewModel: FloatViewModel) {
     val activity = LocalActivity.current
     val context = LocalContext.current
+    val targetHeight by viewModel.targetHeight
+    val targetWidth by viewModel.targetWidth
     val height by animateDpAsState(
-        targetValue = viewModel.targetHeight.value,
+        targetValue = targetHeight,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow), // 弹性 速度
         label = "height"
     )
     val width by animateDpAsState(
-        targetValue = viewModel.targetWidth.value,
+        targetValue = targetWidth,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         label = "width"
     )

@@ -117,11 +117,6 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                 .fillMaxWidth()
                                 .height(100.dp)
                                 .clip(RoundedCornerShape(20))
-                                .background(
-                                    if (!isSelected) Color(0x80000000) else Color(
-                                        0xFF2196F3
-                                    )
-                                )
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
