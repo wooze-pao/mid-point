@@ -13,6 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
@@ -49,6 +50,8 @@ class FloatActivity : ComponentActivity() {
         hideFloatWindow() // 隐藏
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    // TODO
     @SuppressLint("ClickableViewAccessibility")
     fun showFloatWindow() {
         floatLifecycle = FloatComposeLifecycle()
