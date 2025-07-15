@@ -93,11 +93,11 @@ class FloatActivity : ComponentActivity() {
         params.x = 0
         params.y = 300
 
+        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
+        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         floatWindowManager.addView(floatComposeView, params)
         UiState.isShowing.value = true  // 设定为true
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
-        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
-        floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
     fun hideFloatWindow() {

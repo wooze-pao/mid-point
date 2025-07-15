@@ -1,7 +1,9 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.os.Build
 import android.util.Log
 import androidx.activity.compose.LocalActivity
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -38,6 +40,7 @@ import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun FloatWindow(viewModel: FloatViewModel) {

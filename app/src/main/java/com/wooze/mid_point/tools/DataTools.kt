@@ -22,6 +22,13 @@ object DataTools {
         FloatWindowAction.openFloatActivity(context)
     }
 
+    fun extractAndSave(text: String, context: Context) {
+        val mimetype = ClipDescription.MIMETYPE_TEXT_PLAIN
+        val dragData = DragData(plainText = text, mimetype = mimetype)
+        UiState.dragDataList.add(dragData)
+        FloatWindowAction.openFloatActivity(context)
+    }
+
     fun extractAndSave(list: List<Uri>, context: Context) {
         list.forEach { uri ->
             context.grantUriPermission(
