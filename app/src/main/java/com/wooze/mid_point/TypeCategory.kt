@@ -44,7 +44,13 @@ fun typeCategory(data: DragData) {
             }
 
             data.mimetype.startsWith("text/") -> {
-                FileWithName(context, data, "文本类文件", R.drawable.icon_color__doc)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                ) {
+                    data.plainText?.let { Text(it) }
+                }
             }
 
             data.mimetype.startsWith("application/") -> {
@@ -85,13 +91,15 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
                 modifier = Modifier.size(40.dp)
             )
             var name: String = description
-            val cursor = context.contentResolver.query(
-                data.uri,
-                arrayOf(OpenableColumns.DISPLAY_NAME),
-                null,
-                null,
-                null
-            )?.use {
+            val cursor = data.uri?.let {
+                context.contentResolver.query(
+                    it,
+                    arrayOf(OpenableColumns.DISPLAY_NAME),
+                    null,
+                    null,
+                    null
+                )
+            }?.use {
                 if (it.moveToFirst()) {
                     val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                     name = it.getString(index)

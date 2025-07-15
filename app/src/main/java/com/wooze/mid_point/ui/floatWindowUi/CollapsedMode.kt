@@ -3,7 +3,9 @@ package com.wooze.mid_point.ui.floatWindowUi
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
+import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
@@ -23,9 +25,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -40,16 +44,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
             .dragAndDropSource {
                 detectTapGestures(
                     onLongPress = {
-                        val list = UiState.dragDataList
-                        if (list.isNotEmpty()) {
-                            val clipData = ClipData.newUri(
-                                context.contentResolver, "${list[0].mimetype}",
-                                list[0].uri
-                            )
-                            for (i in 1..list.size - 1) {
-                                val item = ClipData.Item(list[i].uri)
-                                clipData.addItem(item)
-                            }
+                        DataTools.sendData(context)?.let { clipData ->
                             startTransfer(
                                 DragAndDropTransferData(
                                     clipData = clipData,
@@ -57,6 +52,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
                                 )
                             )
                         }
+
                     },
                     onTap = { viewModel.toggleState() })
             },

@@ -51,6 +51,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.wooze.mid_point.R
 import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
@@ -127,11 +128,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
                                             DragAndDropTransferData(
-                                                clipData = ClipData.newUri(
-                                                    context.contentResolver,
-                                                    "file",
-                                                    data.uri
-                                                ),
+                                                clipData = DataTools.sendData(context,data),
                                                 flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
                                             )
                                         )
@@ -189,36 +186,7 @@ fun DropMenu(viewModel: FloatViewModel) {
         DropdownMenuItem(
             text = { Text("分享到") },
             onClick = {
-                var share = Intent()
-                var uriArrays = ArrayList<Uri>()
-                if (viewModel.selectMode.value) {
-                    for (i in 0..viewModel.selectList.size - 1) {
-                        val uri = viewModel.selectList[i].uri
-                        uriArrays.add(uri)
-                    }
-                } else {
-                    for (i in 0..UiState.dragDataList.size - 1) {
-                        val uri = UiState.dragDataList[i].uri
-                        uriArrays.add(uri)
-                    }
-                }
-
-
-                if (uriArrays.size == 1) {
-                    share = Intent(Intent.ACTION_SEND)
-                    share.putExtra(Intent.EXTRA_STREAM, uriArrays[0])
-                } else if (uriArrays.size > 1) {
-                    share = Intent(Intent.ACTION_SEND_MULTIPLE)
-                    share.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrays)
-                } else {
-                    viewModel.toggleMenu()
-                    return@DropdownMenuItem
-                }
-                share.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                share.type = "image/*"
-                viewModel.toggleMenu()
-                viewModel.hidden()
-                context.startActivity(Intent.createChooser(share, null))
+                viewModel.shareTo(context)
             },
         )
         DropdownMenuItem(

@@ -1,5 +1,7 @@
 package com.wooze.mid_point.viewModel
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -16,6 +18,7 @@ import com.wooze.mid_point.data.WindowState.Collapsed
 import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.state.UiState
+import com.wooze.mid_point.tools.DataTools
 
 class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
@@ -43,6 +46,22 @@ class FloatViewModel : ViewModel() {
             Collapsed -> 150.dp
             Expand -> 150.dp
         }
+    }
+
+    fun shareTo(context: Context) {
+        val shareIntent = if (selectMode.value) {
+            DataTools.shareData(selectList)
+        } else {
+            DataTools.shareData(UiState.dragDataList)
+        }
+
+        if (shareIntent == null) {
+            toggleMenu()
+            return
+        }
+        toggleMenu()
+        hidden()
+        context.startActivity(Intent.createChooser(shareIntent, null))
     }
 
 
