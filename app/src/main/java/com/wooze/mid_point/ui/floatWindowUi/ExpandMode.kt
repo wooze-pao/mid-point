@@ -1,10 +1,7 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,9 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.wooze.mid_point.R
-import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
+import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
@@ -71,7 +68,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                 .shadow(
                     elevation = 100.dp,
                     shape = RoundedCornerShape(20.dp),
-                    clip = true // ✅ 自动 clip 形状
+                    clip = true
                 )
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.primary)
@@ -128,7 +125,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
                                             DragAndDropTransferData(
-                                                clipData = DataTools.sendData(context,data),
+                                                clipData = DataTools.sendData(context, data),
                                                 flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
                                             )
                                         )

@@ -7,9 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import com.wooze.mid_point.data.DragData
-import com.wooze.mid_point.tools.FloatWindowAction
-import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 
 class ShareActivity : ComponentActivity() {
@@ -33,7 +30,7 @@ class ShareActivity : ComponentActivity() {
                 intent.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
             }
             uri?.let { uri ->
-                DataTools.extractAndSave(uri,this)
+                DataTools.extractAndSave(uri, this)
             }
         } else if (intent?.action == Intent.ACTION_SEND_MULTIPLE) {
             val uriList: List<Uri>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -43,8 +40,8 @@ class ShareActivity : ComponentActivity() {
                 intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
             }
 
-            uriList?.let {uri ->
-                DataTools.extractAndSave(uri,this)
+            uriList?.let { uri ->
+                DataTools.extractAndSave(uri, this)
             }
         }
     }

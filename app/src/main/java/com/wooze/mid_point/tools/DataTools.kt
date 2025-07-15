@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.state.UiState
 
@@ -64,9 +63,9 @@ object DataTools {
             return null
         }
 
-        val clipData = when(list[0].mimetype) {
-            ClipDescription.MIMETYPE_TEXT_PLAIN -> ClipData.newPlainText("text",list[0].plainText)
-            else -> ClipData.newUri(context.contentResolver,"uris",list[0].uri)
+        val clipData = when (list[0].mimetype) {
+            ClipDescription.MIMETYPE_TEXT_PLAIN -> ClipData.newPlainText("text", list[0].plainText)
+            else -> ClipData.newUri(context.contentResolver, "uris", list[0].uri)
         }
 
         for (i in 1..list.size - 1) {
@@ -78,15 +77,15 @@ object DataTools {
                 ClipData.Item(uri)
             }
 
-            clipData.addItem(context.contentResolver,item) // 添加contentResolver 会自动添加 mimetype
+            clipData.addItem(context.contentResolver, item) // 添加contentResolver 会自动添加 mimetype
         }
         return clipData
 
     }
 
-    fun sendData(context: Context,data: DragData): ClipData {
+    fun sendData(context: Context, data: DragData): ClipData {
         val clipData = if (data.plainText != null) {
-            ClipData.newPlainText("text",data.plainText)
+            ClipData.newPlainText("text", data.plainText)
         } else {
             ClipData.newUri(
                 context.contentResolver,
@@ -98,8 +97,8 @@ object DataTools {
     }
 
     fun shareData(uriList: SnapshotStateList<DragData>): Intent? {
-        var intent : Intent
-        var uriArrays = ArrayList<Uri>()
+        var intent: Intent
+        val uriArrays = ArrayList<Uri>()
         for (i in 0..uriList.size - 1) {
             val uri = uriList[i].uri
             uri?.let { uriArrays.add(it) }
@@ -111,9 +110,9 @@ object DataTools {
 
         if (uriArrays.size == 1) {
             intent = Intent(Intent.ACTION_SEND).apply {
-                putExtra(Intent.EXTRA_STREAM,uriArrays[0])
+                putExtra(Intent.EXTRA_STREAM, uriArrays[0])
             }
-        } else  {
+        } else {
             intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrays)
             }

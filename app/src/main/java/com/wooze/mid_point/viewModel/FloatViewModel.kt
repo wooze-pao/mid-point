@@ -77,10 +77,6 @@ class FloatViewModel : ViewModel() {
         UiState.dragDataList.clear()
     }
 
-    fun addFloatData(data: DragData) {
-        UiState.dragDataList.add(data)
-    }
-
     fun hidden() {
         _windowState.value = Hidden
         _selectMode.value = false

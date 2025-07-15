@@ -1,7 +1,6 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.Context
 import android.os.Build
 import android.view.View
