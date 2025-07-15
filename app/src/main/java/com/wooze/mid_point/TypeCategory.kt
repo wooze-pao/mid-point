@@ -99,7 +99,8 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
                     null,
                     null
                 )
-            }?.use {
+            }
+            cursor?.use {
                 if (it.moveToFirst()) {
                     val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                     name = it.getString(index)

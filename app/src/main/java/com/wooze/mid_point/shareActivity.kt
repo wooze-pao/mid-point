@@ -32,7 +32,7 @@ class ShareActivity : ComponentActivity() {
             uri?.let { uri ->
                 DataTools.extractAndSave(uri, this)
             }
-        } else if (intent?.action == Intent.ACTION_SEND_MULTIPLE) {
+        } else if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
             val uriList: List<Uri>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
             } else {
