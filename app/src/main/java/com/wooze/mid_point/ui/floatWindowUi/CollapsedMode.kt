@@ -28,7 +28,6 @@ import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 @OptIn(ExperimentalFoundationApi::class)

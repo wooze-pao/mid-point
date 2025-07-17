@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,23 +39,21 @@ import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.viewModel.FloatViewModel
+import kotlinx.coroutines.delay
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun FloatWindow(viewModel: FloatViewModel) {
     val activity = LocalActivity.current
     val context = LocalContext.current
-    val targetHeight by viewModel.targetHeight
-    val targetWidth by viewModel.targetWidth
     val height by animateDpAsState(
-        targetValue = targetHeight,
+        targetValue = viewModel.targetHeight.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow), // 弹性 速度
         label = "height"
     )
     val width by animateDpAsState(
-        targetValue = targetWidth,
+        targetValue = viewModel.targetWidth.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         label = "width"
     )
@@ -63,7 +62,6 @@ fun FloatWindow(viewModel: FloatViewModel) {
         object : DragAndDropTarget {
             override fun onStarted(event: DragAndDropEvent) {
                 super.onStarted(event)
-                Log.d("开始", "开始")
                 viewModel.collapsed()
             }
 
@@ -91,7 +89,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             .height(height)
             .width(width)
             .clip(RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp))
-            .background(Color.LightGray)
+            .background(Color.White)
             .clickable(
                 onClick = { viewModel.toggleState() }, indication = null,
                 interactionSource = remember { MutableInteractionSource() }

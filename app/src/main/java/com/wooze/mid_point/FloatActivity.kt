@@ -14,11 +14,18 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
@@ -39,10 +46,7 @@ class FloatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         instance = this
         showFloatWindow()
-        lifecycle.coroutineScope.launch {
-            delay(100) // 给予一点延时显示，防止系统销毁（配合excludeFromRecents）
-            moveTaskToBack(true)
-        }
+        moveTaskToBack(true)
     }
 
     override fun onDestroy() { // 清除
@@ -50,7 +54,6 @@ class FloatActivity : ComponentActivity() {
         hideFloatWindow() // 隐藏
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     // TODO
     @SuppressLint("ClickableViewAccessibility")
     fun showFloatWindow() {
@@ -67,28 +70,13 @@ class FloatActivity : ComponentActivity() {
             FloatWindow(viewModel)
         }
 
-        floatComposeView.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_OUTSIDE -> {
-                        viewModel.hidden()
-                        Log.d("开始2", "开始2")
-                        return true
-                    }
-                }
-                return false
-            }
-        })
+        outsideTouch()
 
         @Suppress("DEPRECATION")
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {  //版本检测
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT // 透明背景
         )
@@ -101,6 +89,26 @@ class FloatActivity : ComponentActivity() {
         floatWindowManager.addView(floatComposeView, params)
         UiState.isShowing.value = true  // 设定为true
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
+        // 在compose添加完了延时 触发重新测量 修复不触发bug（测试）
+        floatComposeView.postDelayed({
+            floatWindowManager.updateViewLayout(floatComposeView,params)
+        },200)
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun outsideTouch () {
+        floatComposeView.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when (event?.action) {
+                    MotionEvent.ACTION_OUTSIDE -> {
+                        viewModel.hidden()
+                        return true
+                    }
+                }
+                return false
+            }
+        })
     }
 
     fun hideFloatWindow() {
