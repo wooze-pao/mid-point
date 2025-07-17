@@ -3,36 +3,23 @@ package com.wooze.mid_point
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.graphics.PixelFormat
-import android.os.Build
 import android.os.Bundle
 import android.service.quicksettings.TileService
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
-import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class FloatActivity : ComponentActivity() {
@@ -91,13 +78,13 @@ class FloatActivity : ComponentActivity() {
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
         // 在compose添加完了延时 触发重新测量 修复不触发bug（测试）
         floatComposeView.postDelayed({
-            floatWindowManager.updateViewLayout(floatComposeView,params)
-        },200)
+            floatWindowManager.updateViewLayout(floatComposeView, params)
+        }, 200)
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun outsideTouch () {
+    fun outsideTouch() {
         floatComposeView.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {

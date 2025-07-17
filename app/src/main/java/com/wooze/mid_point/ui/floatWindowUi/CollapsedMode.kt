@@ -2,9 +2,7 @@ package com.wooze.mid_point.ui.floatWindowUi
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource

@@ -50,7 +50,6 @@ import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.typeCategory
-import com.wooze.mid_point.ui.theme.MidPointTheme
 import com.wooze.mid_point.viewModel.FloatViewModel
 
 @SuppressLint("UnrememberedMutableState")

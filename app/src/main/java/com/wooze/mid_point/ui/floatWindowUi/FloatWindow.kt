@@ -1,9 +1,6 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
-import android.os.Build
-import android.util.Log
 import androidx.activity.compose.LocalActivity
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -22,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -39,7 +35,6 @@ import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.viewModel.FloatViewModel
-import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)

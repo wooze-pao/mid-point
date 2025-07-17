@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import com.wooze.mid_point.tools.DataTools
-import org.w3c.dom.Text
 
 class ShareActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,15 +24,15 @@ class ShareActivity : ComponentActivity() {
         var uri: Uri?
         var text: String?
         if (intent.action == Intent.ACTION_SEND) {
-             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
             } else {
                 @Suppress("DEPRECATION")
                 uri = intent.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
             }
             text = intent.getStringExtra(Intent.EXTRA_TEXT)
-            text?.let {text ->
-                DataTools.extractAndSave(text,this)
+            text?.let { text ->
+                DataTools.extractAndSave(text, this)
             }
             uri?.let { uri ->
                 DataTools.extractAndSave(uri, this)
