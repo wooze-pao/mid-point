@@ -1,6 +1,7 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
 import android.util.Log
+import android.view.DragAndDropPermissions
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
@@ -21,7 +22,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
@@ -46,6 +49,7 @@ import com.wooze.mid_point.viewModel.FloatViewModel
 fun FloatWindow(viewModel: FloatViewModel) {
     val activity = LocalActivity.current
     val context = LocalContext.current
+    var permission = remember { mutableStateOf<DragAndDropPermissions?>(null) }
     val height by animateDpAsState(
         targetValue = viewModel.targetHeight.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow), // 弹性 速度
@@ -65,7 +69,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             }
 
             override fun onDrop(event: DragAndDropEvent): Boolean {
-                val permission = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
+                permission.value = activity?.requestDragAndDropPermissions(event.toAndroidDragEvent())
                 DataTools.extractAndSave(event, context)
                 return true
             }
@@ -119,6 +123,12 @@ fun FloatWindow(viewModel: FloatViewModel) {
             }
         }
 
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            permission.value?.release()
+        }
     }
 
 }
