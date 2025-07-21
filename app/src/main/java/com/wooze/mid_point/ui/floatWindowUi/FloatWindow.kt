@@ -87,7 +87,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
         modifier = Modifier
             .height(height)
             .width(width)
-            .clip(RoundedCornerShape(Corner.Outer))
+            .clip(RoundedCornerShape(topEnd = Corner.Outer, bottomEnd = Corner.Outer))
             .background(Color.White)
             .clickable(
                 onClick = { viewModel.toggleState() }, indication = null,
