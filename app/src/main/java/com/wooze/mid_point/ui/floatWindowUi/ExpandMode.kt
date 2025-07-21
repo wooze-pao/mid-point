@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.wooze.mid_point.R
+import com.wooze.mid_point.data.Corner
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.tools.FloatWindowAction
@@ -58,7 +59,6 @@ import com.wooze.mid_point.viewModel.FloatViewModel
 fun ExpandMode(context: Context, viewModel: FloatViewModel) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
             .fillMaxSize()
             .padding(10.dp)
     ) {
@@ -67,7 +67,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                 .fillMaxWidth()
                 .shadow(
                     elevation = 100.dp,
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(Corner.Inner),
                     clip = true
                 )
                 .clip(RoundedCornerShape(20.dp))
@@ -103,7 +103,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
 
         LazyColumn(
             modifier = Modifier
-                .clip(RoundedCornerShape(20)),
+                .clip(RoundedCornerShape(Corner.Inner)),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item { Spacer(modifier = Modifier.height(50.dp)) }
@@ -115,7 +115,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(100.dp)
-                                .clip(RoundedCornerShape(20))
+                                .clip(RoundedCornerShape(Corner.Inner))
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
                                         startTransfer(
@@ -139,7 +139,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                 Box(
                                     modifier = Modifier
                                         .padding(5.dp)
-                                        .clip(RoundedCornerShape(15.dp))
+                                        .clip(RoundedCornerShape(Corner.Selector))
                                         .size(40.dp)
                                         .border(
                                             width = 2.dp,
@@ -173,7 +173,7 @@ fun DropMenu(viewModel: FloatViewModel) {
         expanded = viewModel.menuExpanded,
         onDismissRequest = { viewModel.toggleMenu() },
         modifier = Modifier.width(150.dp),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(Corner.Inner)
     ) {
         DropdownMenuItem(
             text = { Text("分享到") },

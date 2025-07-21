@@ -1,5 +1,6 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
@@ -13,6 +14,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -27,9 +29,11 @@ import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.wooze.mid_point.data.Corner
 import com.wooze.mid_point.data.WindowState.Collapsed
 import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
@@ -83,7 +87,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
         modifier = Modifier
             .height(height)
             .width(width)
-            .clip(RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp))
+            .clip(RoundedCornerShape(Corner.Outer))
             .background(Color.White)
             .clickable(
                 onClick = { viewModel.toggleState() }, indication = null,

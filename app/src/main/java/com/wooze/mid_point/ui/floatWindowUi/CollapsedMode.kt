@@ -21,6 +21,7 @@ import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.wooze.mid_point.data.Corner
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.typeCategory
@@ -35,7 +36,7 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
             .padding(10.dp)
             .requiredHeight(100.dp)
             .requiredWidth(130.dp)
-            .clip(RoundedCornerShape(20))
+            .clip(RoundedCornerShape(Corner.Inner))
             .background(Color.Gray)
             .dragAndDropSource {
                 detectTapGestures(
