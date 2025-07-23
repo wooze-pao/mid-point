@@ -1,8 +1,11 @@
 package com.wooze.mid_point
 
+import android.R.attr.name
+import android.R.attr.x
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +33,7 @@ fun typeCategory(data: DragData) {
     val context = LocalContext.current
     // TODO
     if (data.mimetype != null) {
+        val detailType = data.mimetype.split("/")[1]
         when {
             data.mimetype.startsWith("image/") || data.mimetype.startsWith("video/") -> { // 图片和视频
                 GlideImage(
@@ -40,16 +44,32 @@ fun typeCategory(data: DragData) {
                 )
             }
 
+            data.mimetype.startsWith("font/") -> {
+                FileWithName(context,data,"字体文件",R.drawable.icon_color_font)
+            }
+
             data.mimetype.startsWith("audio/") -> {
                 FileWithName(context, data, "音频文件", R.drawable.icon_color_audio)
             }
 
             data.mimetype.startsWith("text/") -> {
-                FullText(data)
+                when(detailType) {
+                    "plain" -> if (data.plainText != null) {
+                        FullText(data)
+                    } else {
+                        FileWithName(context,data,"文本文件",R.drawable.icon_color__doc)
+                    }
+                    else -> FileWithName(context,data,"文本类文件",R.drawable.icon_color_code)
+                }
             }
 
             data.mimetype.startsWith("application/") -> {
-                FileWithName(context, data, "压缩类文件", R.drawable.icon_color_zip)
+                when(detailType) {
+                    "vnd.android.package-archive" -> FileWithName(context,data,"apk文件",R.drawable.icon_color_apk)
+                    "zip" , "vnd.rar" , "x-tar" -> FileWithName(context,data,"压缩文件",R.drawable.icon_color_zip)
+                    "pdf" -> FileWithName(context,data,"PDF文件",R.drawable.icon_color_pdf)
+                    "octet-stream" -> FileWithName(context,data,"未知文件",R.drawable.icon_color_unknown)
+                }
             }
 
 //            data.mimetype.startsWith("application/") -> {
@@ -107,10 +127,21 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
                 )
             }
             cursor?.use {
-                if (it.moveToFirst()) {
-                    val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    name = it.getString(index)
-                }
+                Log.d("mpDebug", "==== Cursor 内容开始 ====")
+
+                    val columnCount = it.columnCount
+                    val columnNames = it.columnNames
+
+                    while (it.moveToNext()) {
+                        val rowBuilder = StringBuilder()
+                        for (i in 0 until columnCount) {
+                            Log.d("mpDebug",
+                                cursor.getType(i).toString())
+                        }
+                        Log.d("CursorData", rowBuilder.toString())
+                    }
+
+                Log.d("mpDebug", "==== Cursor 内容结束 ====")
             }
             Text(description)
             Text(formatFileName(name), fontSize = 10.sp)

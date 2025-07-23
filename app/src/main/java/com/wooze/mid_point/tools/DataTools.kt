@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.draganddrop.DragAndDropEvent
@@ -52,6 +53,7 @@ object DataTools {
             uri?.let { uri ->
                 val mimetype = context.contentResolver.getType(uri)
                 val dragData = DragData(uri, mimetype)
+                Log.d("mpDebug","${mimetype}")
                 UiState.dragDataList.add(dragData)
             }
             plainText?.let { text ->
@@ -63,7 +65,7 @@ object DataTools {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun sendData(context: Context): ClipData? {
         val list = UiState.dragDataList
         if (list.isEmpty()) {

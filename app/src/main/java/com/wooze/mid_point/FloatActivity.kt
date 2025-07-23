@@ -1,25 +1,44 @@
 package com.wooze.mid_point
 
+import android.animation.TimeInterpolator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.service.quicksettings.TileService
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.launch
 
 
 class FloatActivity : ComponentActivity() {
@@ -42,7 +61,7 @@ class FloatActivity : ComponentActivity() {
     }
 
     // TODO
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "Recycle")
     fun showFloatWindow() {
         floatLifecycle = FloatComposeLifecycle()
         floatLifecycle.performRestore(null)
@@ -64,23 +83,37 @@ class FloatActivity : ComponentActivity() {
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT // 透明背景
         )
         params.gravity = Gravity.TOP or Gravity.START // 从左上角开始
-        params.x = 0
-        params.y = 300
+        params.x = viewModel.position.value.x
+        params.y = viewModel.position.value.y
 
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         floatWindowManager.addView(floatComposeView, params)
+
+        var animate: ValueAnimator? = null
         UiState.isShowing.value = true  // 设定为true
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
-        // 在compose添加完了延时 触发重新测量 修复不触发bug（测试）
-        floatComposeView.postDelayed({
-            floatWindowManager.updateViewLayout(floatComposeView, params)
-        }, 200)
-
+        lifecycleScope.launch {
+            viewModel.position.distinctUntilChangedBy { it.x }.collect { point ->
+                val currentX = (animate?.animatedValue as? Int) ?: params.x
+                if (animate != null) {
+                    animate?.cancel()
+                }
+                animate = ValueAnimator.ofInt(currentX,point.x)
+                animate.duration = 300
+                animate.addUpdateListener {
+                    val x = it.animatedValue as Int
+                    params.x = x
+                    params.y = point.y
+                    floatWindowManager.updateViewLayout(floatComposeView,params)
+                }
+                animate.start()
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

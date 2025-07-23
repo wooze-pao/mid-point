@@ -2,6 +2,9 @@ package com.wooze.mid_point.viewModel
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Point
+import android.util.DisplayMetrics
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -12,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.integration.ktx.Resource
 import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.data.WindowState.Collapsed
@@ -19,6 +23,7 @@ import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
@@ -31,20 +36,18 @@ class FloatViewModel : ViewModel() {
     val selectMode: State<Boolean> = _selectMode
     val selectList = mutableStateListOf<DragData>()
 
+    fun Dp.toPx (): Int {
+        val density = Resources.getSystem().displayMetrics.density
+        return (this.value * density).toInt()
+    }
+
+    val position = MutableStateFlow(Point(-130.dp.toPx(),300))
 
     val targetHeight: State<Dp> = derivedStateOf {
         when (windowState.value) {
             Hidden -> 120.dp
             Collapsed -> 120.dp
             Expand -> 500.dp
-        }
-    }
-
-    val targetWidth: State<Dp> = derivedStateOf {
-        when (windowState.value) {
-            Hidden -> 20.dp
-            Collapsed -> 150.dp
-            Expand -> 150.dp
         }
     }
 
@@ -79,14 +82,20 @@ class FloatViewModel : ViewModel() {
 
     fun hidden() {
         _windowState.value = Hidden
-        _selectMode.value = false
-        selectList.clear()
+        closeSelect()
+        position.value = Point(-130.dp.toPx(),300)
     }
 
     fun collapsed() {
         _windowState.value = Collapsed
+        closeSelect()
+        position.value = Point(0,300)
     }
 
+    fun closeSelect () {
+        _selectMode.value = false
+        selectList.clear()
+    }
     fun expand() {
         _windowState.value = Expand
     }
@@ -95,11 +104,7 @@ class FloatViewModel : ViewModel() {
         when (_windowState.value) {
             Hidden -> collapsed()
             Collapsed -> expand()
-            Expand -> {
-                collapsed()
-                _selectMode.value = false
-                selectList.clear()
-            }
+            Expand -> collapsed()
         }
     }
 }

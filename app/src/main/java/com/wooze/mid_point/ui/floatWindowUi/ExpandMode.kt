@@ -107,7 +107,7 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item { Spacer(modifier = Modifier.height(50.dp)) }
-            UiState.dragDataList.forEach { data ->
+            UiState.dragDataList.asReversed().forEach { data ->
                 item {// TODO 完善悬浮窗
                     if (data.mimetype != null) {
                         val isSelected by derivedStateOf { viewModel.selectList.contains(data) }
@@ -118,12 +118,14 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                 .clip(RoundedCornerShape(Corner.Inner))
                                 .dragAndDropSource {
                                     detectTapGestures(onLongPress = {
-                                        startTransfer(
-                                            DragAndDropTransferData(
-                                                clipData = DataTools.sendData(context, data),
-                                                flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
+                                        if (!viewModel.selectMode.value) {
+                                            startTransfer(
+                                                DragAndDropTransferData(
+                                                    clipData = DataTools.sendData(context, data),
+                                                    flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
+                                                )
                                             )
-                                        )
+                                        }
                                     }, onTap = {
                                         Log.d("haha", "点击")
                                         if (viewModel.selectMode.value && !isSelected) {
@@ -151,7 +153,6 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                                 0xFF2196F3
                                             )
                                         )
-                                        //Color(0xFF2196F3)
                                         .align(alignment = Alignment.TopEnd)
                                         .wrapContentSize(Alignment.Center),
                                 ) {
