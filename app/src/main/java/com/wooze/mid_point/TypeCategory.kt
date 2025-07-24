@@ -1,11 +1,8 @@
 package com.wooze.mid_point
 
-import android.R.attr.name
-import android.R.attr.x
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,7 +42,7 @@ fun typeCategory(data: DragData) {
             }
 
             data.mimetype.startsWith("font/") -> {
-                FileWithName(context,data,"字体文件",R.drawable.icon_color_font)
+                FileWithName(context, data, "字体文件", R.drawable.icon_color_font)
             }
 
             data.mimetype.startsWith("audio/") -> {
@@ -53,30 +50,42 @@ fun typeCategory(data: DragData) {
             }
 
             data.mimetype.startsWith("text/") -> {
-                when(detailType) {
+                when (detailType) {
                     "plain" -> if (data.plainText != null) {
                         FullText(data)
                     } else {
-                        FileWithName(context,data,"文本文件",R.drawable.icon_color__doc)
+                        FileWithName(context, data, "文本文件", R.drawable.icon_color__doc)
                     }
-                    else -> FileWithName(context,data,"文本类文件",R.drawable.icon_color_code)
+
+                    else -> FileWithName(context, data, "文本类文件", R.drawable.icon_color_code)
                 }
             }
 
             data.mimetype.startsWith("application/") -> {
-                when(detailType) {
-                    "vnd.android.package-archive" -> FileWithName(context,data,"apk文件",R.drawable.icon_color_apk)
-                    "zip" , "vnd.rar" , "x-tar" -> FileWithName(context,data,"压缩文件",R.drawable.icon_color_zip)
-                    "pdf" -> FileWithName(context,data,"PDF文件",R.drawable.icon_color_pdf)
-                    "octet-stream" -> FileWithName(context,data,"未知文件",R.drawable.icon_color_unknown)
+                when (detailType) {
+                    "vnd.android.package-archive" -> FileWithName(
+                        context,
+                        data,
+                        "apk文件",
+                        R.drawable.icon_color_apk
+                    )
+
+                    "zip", "vnd.rar", "x-tar" -> FileWithName(
+                        context,
+                        data,
+                        "压缩文件",
+                        R.drawable.icon_color_zip
+                    )
+
+                    "pdf" -> FileWithName(context, data, "PDF文件", R.drawable.icon_color_pdf)
+                    "octet-stream" -> FileWithName(
+                        context,
+                        data,
+                        "未知文件",
+                        R.drawable.icon_color_unknown
+                    )
                 }
             }
-
-//            data.mimetype.startsWith("application/") -> {
-//                when (data.mimetype) {
-//                    "application/zip" -> FileWithName(context,data,"压缩文件",R.drawable.icon_color_file)
-//                }
-//            }
 
             else -> {
                 FileWithName(context, data, "未知文件", R.drawable.icon_color_bar)
@@ -120,28 +129,17 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
             val cursor = data.uri?.let {
                 context.contentResolver.query(
                     it,
-                    arrayOf(OpenableColumns.DISPLAY_NAME),
+                    null,
                     null,
                     null,
                     null
                 )
             }
-            cursor?.use {
-                Log.d("mpDebug", "==== Cursor 内容开始 ====")
-
-                    val columnCount = it.columnCount
-                    val columnNames = it.columnNames
-
-                    while (it.moveToNext()) {
-                        val rowBuilder = StringBuilder()
-                        for (i in 0 until columnCount) {
-                            Log.d("mpDebug",
-                                cursor.getType(i).toString())
-                        }
-                        Log.d("CursorData", rowBuilder.toString())
-                    }
-
-                Log.d("mpDebug", "==== Cursor 内容结束 ====")
+            cursor?.use { cursor ->
+                val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (cursor.moveToFirst()) {
+                    name = cursor.getString(index)
+                }
             }
             Text(description)
             Text(formatFileName(name), fontSize = 10.sp)

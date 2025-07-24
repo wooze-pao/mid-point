@@ -2,7 +2,6 @@ package com.wooze.mid_point.ui.floatWindowUi
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -42,6 +41,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -127,7 +127,6 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
                                             )
                                         }
                                     }, onTap = {
-                                        Log.d("haha", "点击")
                                         if (viewModel.selectMode.value && !isSelected) {
                                             viewModel.selectList.add(data)
                                         } else if (isSelected) {
@@ -177,20 +176,20 @@ fun DropMenu(viewModel: FloatViewModel) {
         shape = RoundedCornerShape(Corner.Inner)
     ) {
         DropdownMenuItem(
-            text = { Text("分享到") },
+            text = { Text(stringResource(R.string.drop_menu_share)) },
             onClick = {
                 viewModel.shareTo(context)
             },
         )
         DropdownMenuItem(
-            text = { Text("清空中转站") },
+            text = { Text(stringResource(R.string.drop_menu_clear)) },
             onClick = {
                 viewModel.resetFloatData()
                 viewModel.toggleMenu()
             },
         )
         DropdownMenuItem(
-            text = { Text("多选模式") },
+            text = { Text(stringResource(R.string.drop_menu_select)) },
             onClick = {
                 viewModel.toggleSelectMode()
                 viewModel.toggleMenu()

@@ -1,42 +1,29 @@
 package com.wooze.mid_point
 
-import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.res.Resources
+import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.service.quicksettings.TileService
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.WindowManager
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
@@ -46,6 +33,7 @@ class FloatActivity : ComponentActivity() {
     private lateinit var floatComposeView: ComposeView
     private lateinit var floatLifecycle: FloatComposeLifecycle
     private val viewModel by viewModels<FloatViewModel>()
+    private var hasBeenOpen = false
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) { // 创建
@@ -58,6 +46,18 @@ class FloatActivity : ComponentActivity() {
     override fun onDestroy() { // 清除
         super.onDestroy()
         hideFloatWindow() // 隐藏
+    }
+
+    override fun onResume() {
+        // 在后台打开回到app
+        super.onResume()
+        if (hasBeenOpen) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        } else {
+            hasBeenOpen = true
+        }
+        moveTaskToBack(true)
     }
 
     // TODO
@@ -83,7 +83,9 @@ class FloatActivity : ComponentActivity() {
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS ,
             PixelFormat.TRANSLUCENT // 透明背景
         )
         params.gravity = Gravity.TOP or Gravity.START // 从左上角开始
@@ -103,13 +105,13 @@ class FloatActivity : ComponentActivity() {
                 if (animate != null) {
                     animate?.cancel()
                 }
-                animate = ValueAnimator.ofInt(currentX,point.x)
-                animate.duration = 300
+                animate = ValueAnimator.ofInt(currentX, point.x)
+                animate.duration = 200
                 animate.addUpdateListener {
                     val x = it.animatedValue as Int
                     params.x = x
                     params.y = point.y
-                    floatWindowManager.updateViewLayout(floatComposeView,params)
+                    floatWindowManager.updateViewLayout(floatComposeView, params)
                 }
                 animate.start()
             }
@@ -122,7 +124,11 @@ class FloatActivity : ComponentActivity() {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_OUTSIDE -> {
-                        viewModel.hidden()
+                        if (viewModel.windowState.value == WindowState.Expand) {
+                            viewModel.collapsed()
+                        } else {
+                            viewModel.hidden()
+                        }
                         return true
                     }
                 }

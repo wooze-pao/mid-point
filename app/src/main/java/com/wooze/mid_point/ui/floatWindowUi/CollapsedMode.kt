@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.wooze.mid_point.R
 import com.wooze.mid_point.data.Corner
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
@@ -61,8 +63,8 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
 
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("拖出以放置")
-                Text("拖入以保存")
+                Text(stringResource(R.string.drag_tip_text_top))
+                Text(stringResource(R.string.drag_tip_text_bottom))
             }
         }
     }

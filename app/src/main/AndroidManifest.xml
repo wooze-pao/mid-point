@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MidPoint"
         tools:targetApi="31">
-        <!--TODO 改名字和图标-->
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.MidPoint">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,6 @@
         <activity
             android:name=".FloatActivity"
             android:launchMode="singleInstance"
-            android:taskAffinity="com.wooze.mid_point.floatWindow"
             android:theme="@style/TranslucentStyle"
             android:exported="false"
             >
@@ -40,13 +39,14 @@
 
         <activity
             android:name=".ShareActivity"
-            android:label="传入中转站"
+            android:label="@string/share_text"
             android:launchMode="singleInstance"
             android:exported="true"
             android:theme="@style/TranslucentStyle">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>

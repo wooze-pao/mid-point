@@ -1,6 +1,5 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
-import android.R.attr.top
 import android.view.DragAndDropPermissions
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
@@ -52,9 +51,11 @@ fun FloatWindow(viewModel: FloatViewModel) {
     val permission = remember { mutableStateOf<DragAndDropPermissions?>(null) }
     val height by animateDpAsState(
         targetValue = viewModel.targetHeight.value,
-        animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow), // 弹性 速度
+        animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessMedium), // 弹性 速度
         label = "height"
-    )
+    ) {
+        viewModel.isAnimating.value = false
+    }
 
     val displayState = when (viewModel.windowState.value) {
         Hidden -> Collapsed

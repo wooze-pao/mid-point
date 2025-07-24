@@ -1,5 +1,20 @@
 <resources>
-    <string name="app_name">midPoint</string>
+    <string name="app_name">中点站</string>
     <string name="tile_label">中转站</string>
     <string name="short_label">开启中转站</string>
+    <string name="drag_tip_text_top">拖出以放置</string>
+    <string name="drag_tip_text_bottom">拖入以保存</string>
+    <string name="drop_menu_share">分享到</string>
+    <string name="drop_menu_clear">清空中转站</string>
+    <string name="drop_menu_select">多选模式</string>
+    <string name="top_bar">中点站 -- demo</string>
+    <string name="state_title">中专站状态</string>
+    <string name="state_open">启动</string>
+    <string name="state_close">关闭</string>
+    <string name="click_button_tip">点击右边按钮进行切换</string>
+    <string name="permission_title">悬浮窗权限获取：</string>
+    <string name="permission_open">已就位</string>
+    <string name="permission_close">未获取</string>
+    <string name="bottom_bar_home">主页</string>
+    <string name="share_text">传入中转站</string>
 </resources>

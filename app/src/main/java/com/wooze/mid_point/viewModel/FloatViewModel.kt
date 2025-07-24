@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Point
-import android.util.DisplayMetrics
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -15,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-import com.bumptech.glide.integration.ktx.Resource
 import com.wooze.mid_point.data.DragData
 import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.data.WindowState.Collapsed
@@ -36,12 +34,14 @@ class FloatViewModel : ViewModel() {
     val selectMode: State<Boolean> = _selectMode
     val selectList = mutableStateListOf<DragData>()
 
-    fun Dp.toPx (): Int {
+    fun Dp.toPx(): Int {
         val density = Resources.getSystem().displayMetrics.density
         return (this.value * density).toInt()
     }
 
-    val position = MutableStateFlow(Point(-130.dp.toPx(),300))
+    val isAnimating = mutableStateOf(false)
+
+    val position = MutableStateFlow(Point(-130.dp.toPx(), 300))
 
     val targetHeight: State<Dp> = derivedStateOf {
         when (windowState.value) {
@@ -81,22 +81,27 @@ class FloatViewModel : ViewModel() {
     }
 
     fun hidden() {
+        if (isAnimating.value) {
+            return
+        }
         _windowState.value = Hidden
         closeSelect()
-        position.value = Point(-130.dp.toPx(),300)
+        position.value = Point(-130.dp.toPx(), 300)
     }
 
     fun collapsed() {
         _windowState.value = Collapsed
         closeSelect()
-        position.value = Point(0,300)
+        position.value = Point(0, 300)
     }
 
-    fun closeSelect () {
+    fun closeSelect() {
         _selectMode.value = false
         selectList.clear()
     }
+
     fun expand() {
+        isAnimating.value = true
         _windowState.value = Expand
     }
 
@@ -104,7 +109,10 @@ class FloatViewModel : ViewModel() {
         when (_windowState.value) {
             Hidden -> collapsed()
             Collapsed -> expand()
-            Expand -> collapsed()
+            Expand -> {
+                isAnimating.value = true
+                collapsed()
+            }
         }
     }
 }

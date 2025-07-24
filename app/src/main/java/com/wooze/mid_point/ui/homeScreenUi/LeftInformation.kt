@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wooze.mid_point.R
 import com.wooze.mid_point.viewModel.MainViewModel
 
 @Composable
@@ -34,7 +36,10 @@ fun LeftInformation(viewModel: MainViewModel, modifier: Modifier) {
 
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("中转站状态", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    stringResource(R.string.state_title),
+                    style = MaterialTheme.typography.titleLarge
+                )
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(
                     modifier = Modifier
@@ -44,11 +49,11 @@ fun LeftInformation(viewModel: MainViewModel, modifier: Modifier) {
                         .background(if (viewModel.isShowing.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
                         .wrapContentSize(Alignment.Center)
                 ) {
-                    Text(viewModel.label, fontSize = 20.sp, color = Color.White)
+                    Text(stringResource(viewModel.label), fontSize = 20.sp, color = Color.White)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    "点击右边按钮进行切换",
+                    stringResource(R.string.click_button_tip),
                     color = MaterialTheme.colorScheme.outline,
                     fontSize = 15.sp
                 )
@@ -64,7 +69,7 @@ fun LeftInformation(viewModel: MainViewModel, modifier: Modifier) {
                         .background(if (viewModel.haveOverlayPermission.value) Color.Green else Color.Red)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("悬浮窗权限获取：${viewModel.permissionLabel}")
+                Text(stringResource(R.string.permission_title) + stringResource(viewModel.permissionLabel))
 
             }
 

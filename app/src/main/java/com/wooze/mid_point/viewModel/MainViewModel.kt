@@ -7,6 +7,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.wooze.mid_point.R
 import com.wooze.mid_point.state.UiState
 
 class MainViewModel : ViewModel() {
@@ -19,12 +20,12 @@ class MainViewModel : ViewModel() {
         return haveOverlayPermission.value
     }
 
-    val permissionLabel by derivedStateOf { if (haveOverlayPermission.value) "已就位" else "未获取" }
+    val permissionLabel by derivedStateOf { if (haveOverlayPermission.value) R.string.permission_open else R.string.permission_close }
 
     val isShowing: State<Boolean> = UiState.isShowing
 
     val topWeight by derivedStateOf { if (isShowing.value) 1f else 4f }
     val bottomWeight by derivedStateOf { if (isShowing.value) 4f else 1f }
 
-    val label by derivedStateOf { if (isShowing.value) "启动" else "关闭" }
+    val label by derivedStateOf { if (isShowing.value) R.string.state_open else R.string.state_close }
 }

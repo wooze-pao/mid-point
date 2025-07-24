@@ -5,14 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import com.wooze.mid_point.tools.DataTools
 
 class ShareActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ShareActivity", "onCreate called")
         moveTaskToBack(true)
         handleShareIntent(intent)
         finish()
@@ -46,6 +44,11 @@ class ShareActivity : ComponentActivity() {
             }
 
             uriList?.let { uri ->
+                DataTools.extractAndSave(uri, this)
+            }
+        } else if (intent.action == Intent.ACTION_VIEW) {
+            val uri = intent.data
+            uri?.let { uri ->
                 DataTools.extractAndSave(uri, this)
             }
         }
