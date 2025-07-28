@@ -3,6 +3,7 @@ package com.wooze.mid_point.ui.homeScreenUi
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,68 +33,65 @@ import com.wooze.mid_point.viewModel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(openFloat: () -> Unit, closeFloat: () -> Unit, viewModel: MainViewModel) {
+fun HomeScreen(
+    openFloat: () -> Unit,
+    closeFloat: () -> Unit,
+    viewModel: MainViewModel,
+    paddingValues: PaddingValues
+) {
     val context = LocalContext.current
 
-    Scaffold(bottomBar = {
-        NavigationBar() {
-            NavigationBarItem(
-                selected = true,
-                onClick = {},
-                icon = { Icon(Icons.Filled.Home, contentDescription = null) },
-                label = { Text(stringResource(R.string.bottom_bar_home)) }
-            )
-        }
-    }, topBar = { TopAppBar(title = { Text(stringResource(R.string.top_bar)) }) }) {
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .padding(start = 5.dp, end = 5.dp)
+    ) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 10.dp, start = 5.dp, end = 5.dp)
+                .fillMaxWidth()
+                .weight(1f)
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
 
-                LeftInformation(viewModel, modifier = Modifier.weight(2f))
+            LeftInformation(viewModel, modifier = Modifier.weight(2f))
 
-                RightButtonGroup(
-                    modifier = Modifier.weight(1f),
-                    viewModel,
-                    context,
-                    { openFloat() },
-                    { closeFloat() })
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Card(Modifier.height(100.dp)) {
-                    Row {
-                        ButtonExp(
-                            Modifier.weight(1f),
-                            onClick = {
-                                val intent = Intent(
-                                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    "package:${context.packageName}".toUri()
-                                )
-                                context.startActivity(intent)
-                            },
-                            "管理权限",
-                            image = {
-                                Icon(
-                                    painterResource(R.drawable.ic_open),
-                                    modifier = Modifier.size(24.dp),
-                                    contentDescription = null
-                                )
-                            })
-
-                    }
+            RightButtonGroup(
+                modifier = Modifier.weight(1f),
+                viewModel,
+                context,
+                { openFloat() },
+                { closeFloat() })
+        }
+        Column(modifier = Modifier
+            .weight(2f)
+            .padding(top = 30.dp)) {
+            Card(Modifier.height(100.dp)) {
+                Row {
+                    ButtonExp(
+                        Modifier.weight(1f),
+                        onClick = {
+                            val intent = Intent(
+                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                "package:${context.packageName}".toUri()
+                            )
+                            context.startActivity(intent)
+                        },
+                        "管理权限",
+                        image = {
+                            Icon(
+                                painterResource(R.drawable.ic_open),
+                                modifier = Modifier.size(24.dp),
+                                contentDescription = null
+                            )
+                        })
 
                 }
 
             }
-        }
 
+        }
     }
+
+
 }
 

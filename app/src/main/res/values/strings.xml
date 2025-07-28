@@ -16,5 +16,6 @@
     <string name="permission_open">已就位</string>
     <string name="permission_close">未获取</string>
     <string name="bottom_bar_home">主页</string>
+    <string name="bottom_bar_setting">设置</string>
     <string name="share_text">传入中转站</string>
 </resources>

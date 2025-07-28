@@ -52,7 +52,6 @@ fun FloatWindow(viewModel: FloatViewModel) {
     val height by animateDpAsState(
         targetValue = viewModel.targetHeight.value,
         animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessMedium), // 弹性 速度
-        label = "height"
     ) {
         viewModel.isAnimating.value = false
     }

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +48,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.wooze.mid_point.BoxExp
+import com.wooze.mid_point.BoxItem
 import com.wooze.mid_point.R
 import com.wooze.mid_point.data.Corner
 import com.wooze.mid_point.state.UiState
@@ -52,6 +57,12 @@ import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.tools.FloatWindowAction
 import com.wooze.mid_point.typeCategory
 import com.wooze.mid_point.viewModel.FloatViewModel
+
+val BoxItems = arrayOf(
+    BoxItem(10f, 1f, Color.Red, 0.dp), // 1
+    BoxItem(5f, 0.8f, Color.Cyan, (-20).dp),
+    BoxItem(1f, 0.6f, Color.DarkGray, (-40).dp)
+)
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
@@ -107,6 +118,20 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item { Spacer(modifier = Modifier.height(50.dp)) }
+//            item {
+//                Box(Modifier.padding(top = 40.dp)) {
+//                BoxItems.forEach { item ->
+//
+//                    BoxExp(Modifier
+//                            .zIndex(item.zIndex)
+//                            .offset(y = item.offset)
+//                            .scale(item.scale),
+//                        item.color
+//                    )
+//                    }
+//                }
+//
+//            }
             UiState.dragDataList.asReversed().forEach { data ->
                 item {// TODO 完善悬浮窗
                     if (data.mimetype != null) {

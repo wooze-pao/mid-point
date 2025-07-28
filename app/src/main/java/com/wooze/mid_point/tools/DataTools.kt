@@ -104,15 +104,16 @@ object DataTools {
     }
 
     fun shareData(uriList: SnapshotStateList<DragData>): Intent? {
+        // TODO plaintext 的分享
+        if (uriList.isEmpty()) {
+            return null
+        }
+
         var intent: Intent
         val uriArrays = ArrayList<Uri>()
         for (i in 0..uriList.size - 1) {
             val uri = uriList[i].uri
             uri?.let { uriArrays.add(it) }
-        }
-
-        if (uriList.isEmpty()) {
-            return null
         }
 
         if (uriArrays.size == 1) {

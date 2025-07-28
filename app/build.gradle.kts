@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.navigation:navigation-compose:2.9.2")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
     testImplementation(libs.junit)
