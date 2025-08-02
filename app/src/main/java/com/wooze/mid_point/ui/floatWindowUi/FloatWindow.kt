@@ -107,7 +107,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
                 .height(height)
                 .width(150.dp)
                 .clip(RoundedCornerShape(topEnd = Corner.Outer, bottomEnd = Corner.Outer))
-                .background(Color.White)
+                .background(Color.LightGray)
                 .clickable(
                     onClick = { viewModel.toggleState() }, indication = null,
                     interactionSource = remember { MutableInteractionSource() }

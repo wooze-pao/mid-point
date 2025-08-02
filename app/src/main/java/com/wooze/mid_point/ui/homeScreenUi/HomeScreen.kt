@@ -10,21 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.wooze.mid_point.R
@@ -62,9 +54,11 @@ fun HomeScreen(
                 { openFloat() },
                 { closeFloat() })
         }
-        Column(modifier = Modifier
-            .weight(2f)
-            .padding(top = 30.dp)) {
+        Column(
+            modifier = Modifier
+                .weight(2f)
+                .padding(top = 30.dp)
+        ) {
             Card(Modifier.height(100.dp)) {
                 Row {
                     ButtonExp(

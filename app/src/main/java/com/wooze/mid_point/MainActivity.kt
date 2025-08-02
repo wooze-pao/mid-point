@@ -18,8 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,6 +36,7 @@ import com.wooze.mid_point.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +47,8 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
                 val navController = rememberNavController()
                 Scaffold(
-                    bottomBar = {BottomBar(navController)},
-                    topBar = { TopAppBar({Text(stringResource(R.string.top_bar))}) }
+                    bottomBar = { BottomBar(navController) },
+                    topBar = { TopAppBar({ Text(stringResource(R.string.top_bar)) }) }
                 ) { paddingValues ->
                     NavHost(navController, startDestination = NavRouter.HOME) {
                         composable(NavRouter.HOME) {

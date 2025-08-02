@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Point
+import android.util.Log
+import android.util.Log.i
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -27,21 +29,46 @@ class FloatViewModel : ViewModel() {
     // 因为在上面导入了WindowState.*所以忽略了WindowState.什么什么，直接Hidden或其他
     private val _windowState: MutableState<WindowState> = mutableStateOf(Hidden)
     val windowState: State<WindowState> = _windowState
-
     var menuExpanded: Boolean by mutableStateOf(false)
-
     private val _selectMode = mutableStateOf(false)
     val selectMode: State<Boolean> = _selectMode
     val selectList = mutableStateListOf<DragData>()
+    val isAnimating = mutableStateOf(false)
+    var clickedGroupIndex by mutableStateOf<Int?>(null)
+    val selectedGroups = mutableStateListOf<Int>()
+    val position = MutableStateFlow(Point(-130.dp.toPx(), 300))
+
+    fun addIndex (index: Int) {
+        clickedGroupIndex = index
+        Log.d("mpDebug","$index")
+    }
+
+    fun removeThing () {
+        if (clickedGroupIndex != null) {
+            selectList.forEach { dragData ->
+                UiState.groupDragList[clickedGroupIndex!!].remove(dragData)
+            }
+            if (UiState.groupDragList[clickedGroupIndex!!].isEmpty()) {
+                UiState.groupDragList.removeAt(clickedGroupIndex!!)
+                clickedGroupIndex = null
+            }
+            closeSelect()
+        }
+
+    }
+
+    fun removeSelectedGroups() {
+        selectedGroups.forEach {index ->
+            UiState.groupDragList.removeAt(index)
+        }
+        selectedGroups.clear()
+        closeSelect()
+    }
 
     fun Dp.toPx(): Int {
         val density = Resources.getSystem().displayMetrics.density
         return (this.value * density).toInt()
     }
-
-    val isAnimating = mutableStateOf(false)
-
-    val position = MutableStateFlow(Point(-130.dp.toPx(), 300))
 
     val targetHeight: State<Dp> = derivedStateOf {
         when (windowState.value) {
@@ -55,7 +82,7 @@ class FloatViewModel : ViewModel() {
         val shareIntent = if (selectMode.value) {
             DataTools.shareData(selectList)
         } else {
-            DataTools.shareData(UiState.dragDataList)
+            DataTools.shareData(UiState.groupDragList.flatten())
         }
 
         if (shareIntent == null) {
@@ -77,7 +104,7 @@ class FloatViewModel : ViewModel() {
     }
 
     fun resetFloatData() {
-        UiState.dragDataList.clear()
+        UiState.groupDragList.clear()
     }
 
     fun hidden() {
@@ -92,6 +119,7 @@ class FloatViewModel : ViewModel() {
     fun collapsed() {
         _windowState.value = Collapsed
         closeSelect()
+        clickedGroupIndex = null
         position.value = Point(0, 300)
     }
 
