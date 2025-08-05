@@ -1,5 +1,6 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
+import android.util.Log
 import android.view.DragAndDropPermissions
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
+import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -92,18 +94,15 @@ fun FloatWindow(viewModel: FloatViewModel) {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
-            .shadow(
-                elevation = 5.dp,
-                shape = RoundedCornerShape(topEnd = Corner.shadow, bottomEnd = Corner.shadow),
-                clip = false
-            )
 
-    ) {
         Box(
             modifier = Modifier
+                .padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
+                .shadow(
+                    elevation = 5.dp,
+                    shape = RoundedCornerShape(topEnd = Corner.shadow, bottomEnd = Corner.shadow),
+                    clip = false
+                )
                 .height(height)
                 .width(150.dp)
                 .clip(RoundedCornerShape(topEnd = Corner.Outer, bottomEnd = Corner.Outer))
@@ -144,7 +143,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
                 permission.value?.release()
             }
         }
-    }
+
 }
 
 
