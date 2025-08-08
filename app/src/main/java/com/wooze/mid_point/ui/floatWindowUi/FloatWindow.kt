@@ -7,7 +7,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -15,6 +14,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -29,15 +29,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
-import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.wooze.mid_point.data.Corner
+import com.wooze.mid_point.data.SizesDp
 import com.wooze.mid_point.data.WindowState.Collapsed
 import com.wooze.mid_point.data.WindowState.Expand
 import com.wooze.mid_point.data.WindowState.Hidden
@@ -58,9 +58,9 @@ fun FloatWindow(viewModel: FloatViewModel) {
         viewModel.isAnimating.value = false
     }
 
-    val displayState = when (viewModel.windowState.value) {
-        Hidden -> Collapsed
-        else -> viewModel.windowState.value
+    val expended = when (viewModel.windowState.value) {
+        Hidden, Collapsed -> false
+        Expand -> true
     }
 
 
@@ -88,61 +88,67 @@ fun FloatWindow(viewModel: FloatViewModel) {
             }
 
             override fun onExited(event: DragAndDropEvent) {
-                super.onEnded(event)
+                super.onExited(event)
                 viewModel.hidden()
             }
         }
     }
 
+    val screenWidth = context.resources.displayMetrics.widthPixels
+    Log.d("mpDebug", "$screenWidth")
 
-        Box(
-            modifier = Modifier
-                .padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
-                .shadow(
-                    elevation = 5.dp,
-                    shape = RoundedCornerShape(topEnd = Corner.shadow, bottomEnd = Corner.shadow),
-                    clip = false
-                )
-                .height(height)
-                .width(150.dp)
-                .clip(RoundedCornerShape(topEnd = Corner.Outer, bottomEnd = Corner.Outer))
-                .background(Color.LightGray)
-                .clickable(
-                    onClick = { viewModel.toggleState() }, indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                )
-                .dragAndDropTarget(
-                    shouldStartDragAndDrop = { return@dragAndDropTarget true },
-                    target = dndTarget
-                )
+    Box(
+        modifier = Modifier
+            .padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
+            .shadow(
+                elevation = 5.dp,
+                shape = RoundedCornerShape(SizesDp.R_SHADOW),
+                clip = false
+            )
+            .height(height)
+            .width(SizesDp.WINDOW_WIDTH)
+            .clip(RoundedCornerShape(SizesDp.R_OUTER))
+            .background(Color.LightGray)
+            .clickable(
+                onClick = { viewModel.toggleState() }, indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            .dragAndDropTarget(
+                shouldStartDragAndDrop = { return@dragAndDropTarget true },
+                target = dndTarget
+            )
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = { viewModel.inDrag = true },
+                    onDragEnd = { viewModel.endDrag() })
+                { change, dragAmount ->
+                    change.consume()
+                    viewModel.dragToChangePosition(dragAmount)
 
-        ) {
-            AnimatedContent(
-                targetState = displayState,
-                transitionSpec = {
-                    fadeIn(tween(durationMillis = 200, delayMillis = 400)).togetherWith(
-                        fadeOut()
-                    )
-                }
-            ) { state ->
-                when (state) {
-                    Collapsed, Hidden -> {
-                        CollapsedMode(context, viewModel)
-                    }
-
-                    Expand -> {
-                        ExpandMode(context, viewModel)
-                    }
                 }
             }
 
-        }
-
-        DisposableEffect(Unit) {
-            onDispose {
-                permission.value?.release()
+    ) {
+        AnimatedContent(
+            targetState = expended,
+            transitionSpec = {
+                fadeIn().togetherWith(fadeOut())
+            }
+        ) { state ->
+            if (state) {
+                ExpandMode(context, viewModel)
+            } else {
+                CollapsedMode(context, viewModel)
             }
         }
+
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            permission.value?.release()
+        }
+    }
 
 }
 

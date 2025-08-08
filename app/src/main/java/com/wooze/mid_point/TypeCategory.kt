@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.wooze.mid_point.data.DragData
+import com.wooze.mid_point.data.SizesDp
 
 @SuppressLint("Recycle")
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -36,7 +39,9 @@ fun typeCategory(data: DragData) {
                 GlideImage(
                     model = data.uri,
                     contentDescription = "picture",
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(SizesDp.ITEM_HEIGHT),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -100,7 +105,8 @@ fun typeCategory(data: DragData) {
 fun FullText(data: DragData) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .requiredHeight(SizesDp.ITEM_HEIGHT)
             .background(Color.White)
     ) {
         data.plainText?.let { Text(it, modifier = Modifier.padding(8.dp), maxLines = 5) }

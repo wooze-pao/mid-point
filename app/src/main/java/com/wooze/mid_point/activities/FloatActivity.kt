@@ -1,4 +1,4 @@
-package com.wooze.mid_point
+package com.wooze.mid_point.activities
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -19,14 +19,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.wooze.mid_point.FloatComposeLifecycle
 import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.ui.floatWindowUi.FloatWindow
 import com.wooze.mid_point.viewModel.FloatViewModel
-import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
-
 
 class FloatActivity : ComponentActivity() {
     private lateinit var floatWindowManager: WindowManager
@@ -60,7 +59,6 @@ class FloatActivity : ComponentActivity() {
         moveTaskToBack(true)
     }
 
-    // TODO
     @SuppressLint("ClickableViewAccessibility", "Recycle")
     fun showFloatWindow() {
         floatLifecycle = FloatComposeLifecycle()
@@ -96,24 +94,33 @@ class FloatActivity : ComponentActivity() {
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         floatWindowManager.addView(floatComposeView, params)
 
+
         var animate: ValueAnimator? = null
         UiState.isShowing.value = true  // 设定为true
         TileService.requestListeningState(this, ComponentName(this, FloatControlTile::class.java))
         lifecycleScope.launch {
-            viewModel.position.distinctUntilChangedBy { it.x }.collect { point ->
-                val currentX = (animate?.animatedValue as? Int) ?: params.x
-                if (animate != null) {
-                    animate?.cancel()
-                }
-                animate = ValueAnimator.ofInt(currentX, point.x)
-                animate.duration = 200
-                animate.addUpdateListener {
-                    val x = it.animatedValue as Int
-                    params.x = x
+            viewModel.position.collect { point ->
+                if (!viewModel.inDrag) {
+
+                    val currentX = params.x
+                    if (animate != null) {
+                        animate?.cancel()
+                    }
+                    animate = ValueAnimator.ofInt(currentX, point.x)
+                    animate.duration = 200
+                    animate.addUpdateListener {
+                        val x = it.animatedValue as Int
+                        params.x = x
+                        params.y = point.y
+                        floatWindowManager.updateViewLayout(floatComposeView, params)
+                    }
+                    animate.start()
+                } else {
+                    params.x = point.x
                     params.y = point.y
                     floatWindowManager.updateViewLayout(floatComposeView, params)
                 }
-                animate.start()
+
             }
         }
     }
@@ -126,6 +133,7 @@ class FloatActivity : ComponentActivity() {
                     MotionEvent.ACTION_OUTSIDE -> {
                         if (viewModel.windowState.value == WindowState.Expand) {
                             viewModel.collapsed()
+                            viewModel.isAnimating.value = true // 如果在动画移动中改变大小会导致卡顿，所以使用这个来检测完成
                         } else {
                             viewModel.hidden()
                         }

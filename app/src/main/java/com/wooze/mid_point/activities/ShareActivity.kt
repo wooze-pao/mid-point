@@ -1,4 +1,4 @@
-package com.wooze.mid_point
+package com.wooze.mid_point.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,7 +13,7 @@ class ShareActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         moveTaskToBack(true)
         handleShareIntent(intent)
-        finish()
+        finish() // 结束后完成
     }
 
 

@@ -1,4 +1,4 @@
-package com.wooze.mid_point
+package com.wooze.mid_point.ui.floatWindowUi
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,39 +22,34 @@ data class BoxItem(
     val scale: Float,
     val color: Color,
     val offset: Dp,
-    val contentBox: Boolean = false
 )
 
 val BoxItems = arrayOf(
-    BoxItem(10f, 1f, Color.Red, 0.dp, true), // 1
     BoxItem(5f, 0.9f, Color.White, (-10).dp),
     BoxItem(1f, 0.8f, Color.White, (-20).dp)
 )
 
 @Composable
 fun StackBox(content: @Composable () -> Unit) {
-    Box(modifier = Modifier.padding(top = 20.dp)) {
+    Box(modifier = Modifier.padding(top = 10.dp)) {
+        BoxExp(Modifier.zIndex(10f)) {
+            content()
+        }
+
         BoxItems.forEach { item ->
-            if (item.contentBox) {
-                BoxExp(
-                    Modifier
-                        .zIndex(item.zIndex)
-                        .offset(y = item.offset)
-                        .scale(item.scale)
-                        .shadow(10.dp),
-                ) {
-                    content()
-                }
-            } else {
-                BoxExp(
-                    Modifier
-                        .zIndex(item.zIndex)
-                        .offset(y = item.offset)
-                        .scale(item.scale)
-                        .border(width = 1.dp,color = Color.DarkGray, shape = RoundedCornerShape(20.dp)),
-                    item.color
-                )
-            }
+            BoxExp(
+                Modifier
+                    .zIndex(item.zIndex)
+                    .offset(y = item.offset)
+                    .scale(item.scale)
+                    .border(
+                        width = 1.dp,
+                        color = Color.DarkGray,
+                        shape = RoundedCornerShape(20.dp)
+                    ),
+                item.color
+            )
+
         }
     }
 

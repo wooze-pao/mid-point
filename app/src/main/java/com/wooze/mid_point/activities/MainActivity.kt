@@ -1,4 +1,4 @@
-package com.wooze.mid_point
+package com.wooze.mid_point.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.wooze.mid_point.R
 import com.wooze.mid_point.data.NavRouter
 import com.wooze.mid_point.tools.FloatWindowAction.closeFloatActivity
 import com.wooze.mid_point.tools.FloatWindowAction.openFloatActivity

@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.wooze.mid_point.R
-import com.wooze.mid_point.data.Corner
+import com.wooze.mid_point.data.SizesDp
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.typeCategory
@@ -33,9 +33,9 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
     Box(
         modifier = Modifier
             .padding(10.dp)
-            .requiredHeight(100.dp)
-            .requiredWidth(130.dp)
-            .clip(RoundedCornerShape(Corner.Inner))
+            .requiredHeight(SizesDp.ITEM_HEIGHT)
+            .requiredWidth(SizesDp.ITEM_WIDTH)
+            .clip(RoundedCornerShape(SizesDp.R_INNER))
             .background(Color.Gray)
             .dragOutData(DataTools.sendData(context)) {
                 viewModel.toggleState()

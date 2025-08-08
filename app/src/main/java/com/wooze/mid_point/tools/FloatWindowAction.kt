@@ -2,7 +2,7 @@ package com.wooze.mid_point.tools
 
 import android.content.Context
 import android.content.Intent
-import com.wooze.mid_point.FloatActivity
+import com.wooze.mid_point.activities.FloatActivity
 import com.wooze.mid_point.state.UiState
 
 object FloatWindowAction {
