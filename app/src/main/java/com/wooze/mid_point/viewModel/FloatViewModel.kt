@@ -210,7 +210,6 @@ class FloatViewModel : ViewModel() {
 
     fun expand() {
         if (isAnimating.value) return
-        isAnimating.value = true
         goToNewState(Expand)
     }
 
