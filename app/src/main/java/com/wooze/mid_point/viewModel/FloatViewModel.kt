@@ -37,7 +37,7 @@ class FloatViewModel : ViewModel() {
     val isAnimating = mutableStateOf(false)
     var clickedGroupIndex by mutableStateOf<Int?>(null)
     val selectedGroups = mutableStateListOf<Int>()
-    val position = MutableStateFlow(Point(-SizesDp.WINDOW_WID_GAP.toPx(), 100))
+    val position = MutableStateFlow(Point(SizesDp.WINDOW_GAP_R.toPx(), 100))
 
     enum class Side { LEFT, RIGHT }
 
@@ -45,14 +45,14 @@ class FloatViewModel : ViewModel() {
 
     fun getPosition(state: WindowState): Point {
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-        val offsetX = SizesDp.WINDOW_WID_GAP.toPx() // 打开关闭时流出20.dp的宽度
+        val offsetX = SizesDp.WINDOW_GAP_R.toPx() // 打开关闭时流出20.dp的宽度
         val y = position.value.y
 
         return when (state) {
             Hidden -> if (side == Side.LEFT) Point(
-                -offsetX,
+                offsetX,
                 y
-            ) else Point(screenWidth - 20.dp.toPx(), y)
+            ) else Point(screenWidth - SizesDp.WINDOW_WID_GAP.toPx(), y)
 
             Expand, Collapsed -> if (side == Side.LEFT) Point(
                 0,

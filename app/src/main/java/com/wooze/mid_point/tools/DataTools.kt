@@ -5,6 +5,7 @@ import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
@@ -143,24 +144,35 @@ object DataTools {
 
     fun shareData(uriList: List<DragData>): Intent? {
         // TODO plaintext 的分享
+        Log.d("mpDebug", "${uriList}")
         if (uriList.isEmpty()) {
             return null
         }
 
         var intent: Intent
         val uriArrays = ArrayList<Uri>()
+        val textArrays = ArrayList<String>()
         for (i in 0..uriList.size - 1) {
+            val text = uriList[i].plainText
             val uri = uriList[i].uri
             uri?.let { uriArrays.add(it) }
+            text?.let { textArrays.add(it) }
         }
 
-        if (uriArrays.size == 1) {
-            intent = Intent(Intent.ACTION_SEND).apply {
+        intent = if (uriArrays.size == 1) {
+            Intent(Intent.ACTION_SEND).apply {
                 putExtra(Intent.EXTRA_STREAM, uriArrays[0])
             }
-        } else {
-            intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+        } else if (uriArrays.size > 1) {
+            Intent(Intent.ACTION_SEND_MULTIPLE).apply {
                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrays)
+                putExtra(Intent.EXTRA_TEXT, "hihi")
+            }
+        } else {
+            // 单独分享文字组合 因为似乎这种才能被其他应用识别
+            val fullText = textArrays.joinToString("\n\n")
+            Intent(Intent.ACTION_SEND).apply {
+                putExtra(Intent.EXTRA_TEXT, fullText)
             }
         }
 
