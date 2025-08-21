@@ -217,10 +217,9 @@ class FloatViewModel : ViewModel() {
         when (_windowState.value) {
             Hidden -> collapsed()
             Collapsed -> expand()
-            Expand -> {
-                isAnimating.value = true
-                collapsed()
-            }
+            Expand -> {collapsed()
+            isAnimating.value = true}
+
         }
     }
 

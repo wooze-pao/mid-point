@@ -119,6 +119,7 @@ fun FileWithName(context: Context, data: DragData, description: String, icon: In
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .requiredHeight(SizesDp.ITEM_HEIGHT)
             .background(Color.White)
     ) {
         Column(

@@ -4,15 +4,19 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.Bundle
 import android.service.quicksettings.TileService
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -84,12 +88,17 @@ class FloatActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            PixelFormat.TRANSLUCENT // 透明背景
+            PixelFormat.TRANSLUCENT,// 透明背景
+
         )
         params.gravity = Gravity.TOP or Gravity.START // 从左上角开始
         params.x = viewModel.position.value.x
         params.y = viewModel.position.value.y
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 当安卓9以上
+            // 可以参考官方的edgeToEdge函数
+            // 在安卓15以上会自动解读为 ALWAYS 所以不用特地检测
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         floatWindowManager.addView(floatComposeView, params)
