@@ -1,55 +1,89 @@
 package com.wooze.mid_point.activities
 
+import android.app.StatusBarManager
+import android.content.ComponentName
+import android.content.Intent
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bumptech.glide.util.Executors
 import com.wooze.mid_point.R
 import com.wooze.mid_point.data.NavRouter
+import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.tools.FloatWindowAction.closeFloatActivity
 import com.wooze.mid_point.tools.FloatWindowAction.openFloatActivity
 import com.wooze.mid_point.ui.SettingPage
 import com.wooze.mid_point.ui.homeScreenUi.HomeScreen
 import com.wooze.mid_point.ui.theme.MidPointTheme
 import com.wooze.mid_point.viewModel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            viewModel.initData(this@MainActivity)
+        }
+
         Log.d("TaskTest", "MainActivity taskId = $taskId")
         enableEdgeToEdge()
         setContent {
-            MidPointTheme {
-                val context = LocalContext.current
+            val context = LocalContext.current
+            MidPointTheme(dynamicColor = true) {
                 val navController = rememberNavController()
                 Scaffold(
                     bottomBar = { BottomBar(navController) },
-                    topBar = { TopAppBar({ Text(stringResource(R.string.top_bar)) }) }
+                    topBar = { TopAppBar({ Text(stringResource(R.string.top_bar)) }, colors = TopAppBarDefaults.topAppBarColors(
+                        MaterialTheme.colorScheme.inverseOnSurface)) }
                 ) { paddingValues ->
                     NavHost(navController, startDestination = NavRouter.HOME) {
                         composable(NavRouter.HOME) {
@@ -61,7 +95,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(NavRouter.SETTING) {
-                            SettingPage()
+                            SettingPage(viewModel)
                         }
                     }
                 }

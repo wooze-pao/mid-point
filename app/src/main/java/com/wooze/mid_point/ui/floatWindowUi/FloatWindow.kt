@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -108,7 +109,7 @@ fun FloatWindow(viewModel: FloatViewModel) {
             .height(height)
             .width(SizesDp.WINDOW_WIDTH)
             .clip(RoundedCornerShape(SizesDp.R_OUTER))
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.background)
             .clickable(
                 onClick = { viewModel.toggleState() }, indication = null,
                 interactionSource = remember { MutableInteractionSource() }

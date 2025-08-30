@@ -1,18 +1,60 @@
 package com.wooze.mid_point.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.wooze.mid_point.viewModel.MainViewModel
 
+
+sealed class SettingItemData {
+    abstract val title: String
+    abstract val label: String
+    data class SwitchItem(
+        override val title: String,
+        override val label: String,
+        val onChange: (Boolean) -> Unit,
+        val value: Boolean
+    ) : SettingItemData()
+
+    data class ClickItem(
+        override val title: String,
+        override val label: String,
+        val onClick: () -> Unit
+    ) : SettingItemData()
+}
+
+// 假设我们有几项设置要显示
 @Composable
-fun SettingPage() {
+fun SettingPage(viewModel: MainViewModel) {
+    val context = LocalContext.current
     Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.inverseOnSurface)
+            .padding(20.dp),
         verticalArrangement = Arrangement.Center
     ) {
         CategoryItems(

@@ -1,7 +1,6 @@
 package com.wooze.mid_point
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.provider.OpenableColumns
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +28,7 @@ import com.wooze.mid_point.data.SizesDp
 @SuppressLint("Recycle")
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun typeCategory(data: DragData) {
-    val context = LocalContext.current
+fun TypeCategory(data: DragData) {
     // TODO
     if (data.mimetype != null) {
         val detailType = data.mimetype.split("/")[1]
@@ -47,11 +45,11 @@ fun typeCategory(data: DragData) {
             }
 
             data.mimetype.startsWith("font/") -> {
-                FileWithName(context, data, "字体文件", R.drawable.icon_color_font)
+                FileWithName(data, "字体文件", R.drawable.icon_color_font)
             }
 
             data.mimetype.startsWith("audio/") -> {
-                FileWithName(context, data, "音频文件", R.drawable.icon_color_audio)
+                FileWithName(data, "音频文件", R.drawable.icon_color_audio)
             }
 
             data.mimetype.startsWith("text/") -> {
@@ -59,32 +57,31 @@ fun typeCategory(data: DragData) {
                     "plain" -> if (data.plainText != null) {
                         FullText(data)
                     } else {
-                        FileWithName(context, data, "文本文件", R.drawable.icon_color__doc)
+                        FileWithName(data, "文本文件", R.drawable.icon_color__doc)
                     }
 
-                    else -> FileWithName(context, data, "文本类文件", R.drawable.icon_color_code)
+                    else -> FileWithName(data, "文本类文件", R.drawable.icon_color_code)
                 }
             }
 
             data.mimetype.startsWith("application/") -> {
                 when (detailType) {
                     "vnd.android.package-archive" -> FileWithName(
-                        context,
+
                         data,
                         "apk文件",
                         R.drawable.icon_color_apk
                     )
 
                     "zip", "vnd.rar", "x-tar" -> FileWithName(
-                        context,
+
                         data,
                         "压缩文件",
                         R.drawable.icon_color_zip
                     )
 
-                    "pdf" -> FileWithName(context, data, "PDF文件", R.drawable.icon_color_pdf)
+                    "pdf" -> FileWithName( data, "PDF文件", R.drawable.icon_color_pdf)
                     "octet-stream" -> FileWithName(
-                        context,
                         data,
                         "未知文件",
                         R.drawable.icon_color_unknown
@@ -93,7 +90,7 @@ fun typeCategory(data: DragData) {
             }
 
             else -> {
-                FileWithName(context, data, "未知文件", R.drawable.icon_color_bar)
+                FileWithName(data, "未知文件", R.drawable.icon_color_unknown)
             }
 
         }
@@ -115,7 +112,8 @@ fun FullText(data: DragData) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FileWithName(context: Context, data: DragData, description: String, icon: Int) {
+fun FileWithName(data: DragData, description: String, icon: Int) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -35,6 +35,6 @@ fun ButtonExp(
         verticalArrangement = Arrangement.Center
     ) {
         image()
-        Text(text)
+        Text(text, color = MaterialTheme.colorScheme.onSecondary)
     }
 }

@@ -46,7 +46,7 @@ import com.wooze.mid_point.data.SizesDp
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.tools.FloatWindowAction
-import com.wooze.mid_point.typeCategory
+import com.wooze.mid_point.TypeCategory
 import com.wooze.mid_point.ui.addon.dragOutData
 import com.wooze.mid_point.viewModel.FloatViewModel
 
@@ -64,7 +64,6 @@ fun ExpandMode(context: Context, viewModel: FloatViewModel) {
     }
 }
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ContentList(viewModel: FloatViewModel, context: Context) {
     LazyColumn(
@@ -77,7 +76,7 @@ fun ContentList(viewModel: FloatViewModel, context: Context) {
             val actualIndex = UiState.groupDragList.size - index - 1
             if (viewModel.clickedGroupIndex == null) {
                 item(key = data.hashCode()) {
-                    val isSelected by derivedStateOf { viewModel.selectedGroups.contains(actualIndex) }
+                    val isSelected by remember { derivedStateOf { viewModel.selectedGroups.contains(actualIndex) } }
                     Box(
                         modifier = Modifier
                             .requiredWidth(SizesDp.ITEM_WIDTH)
@@ -91,10 +90,10 @@ fun ContentList(viewModel: FloatViewModel, context: Context) {
                             }
                     ) {
                         if (data.size == 1) {
-                            typeCategory(data[0])
+                            TypeCategory(data[0])
                         } else {
                             StackBox {
-                                typeCategory(data.last())
+                                TypeCategory(data.last())
                             }
                         }
                         if (viewModel.selectMode.value) {
@@ -122,7 +121,7 @@ fun ContentList(viewModel: FloatViewModel, context: Context) {
                                 viewModel.toggleSelection(dragData, isSelected)
                             }
                     ) {
-                        typeCategory(dragData)
+                        TypeCategory(dragData)
                         if (viewModel.selectMode.value) {
                             CheckBoxExp(isSelected, Modifier.align(Alignment.TopEnd))
                         }
@@ -203,10 +202,10 @@ fun MenuBar(viewModel: FloatViewModel) {
                     .clip(CircleShape)
                     .height(20.dp)
                     .width(40.dp)
-                    .background(Color.LightGray),
+                    .background(MaterialTheme.colorScheme.background),
                 contentAlignment = Alignment.Center
             ) {
-                Text("${UiState.groupDragList.size}")
+                Text("${UiState.groupDragList.size}", color = MaterialTheme.colorScheme.onBackground)
             }
             IconButton(onClick = { viewModel.toggleMenu() }) {
                 Icon(painterResource(R.drawable.menu), contentDescription = null)
