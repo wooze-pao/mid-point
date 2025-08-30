@@ -4,19 +4,16 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
 import android.service.quicksettings.TileService
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +21,6 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.wooze.mid_point.FloatComposeLifecycle
-import com.wooze.mid_point.data.DataStoreManager
 import com.wooze.mid_point.data.WindowState
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
@@ -102,7 +98,8 @@ class FloatActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 当安卓9以上
             // 可以参考官方的edgeToEdge函数
             // 在安卓15以上会自动解读为 ALWAYS 所以不用特地检测
-            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            params.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         floatLifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)

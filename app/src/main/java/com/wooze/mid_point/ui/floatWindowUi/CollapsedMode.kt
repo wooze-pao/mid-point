@@ -16,14 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.wooze.mid_point.R
+import com.wooze.mid_point.TypeCategory
 import com.wooze.mid_point.data.SizesDp
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
-import com.wooze.mid_point.TypeCategory
 import com.wooze.mid_point.ui.addon.dragOutData
 import com.wooze.mid_point.viewModel.FloatViewModel
 
@@ -49,8 +48,14 @@ fun CollapsedMode(context: Context, viewModel: FloatViewModel) {
 
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.drag_tip_text_top), color = MaterialTheme.colorScheme.onPrimary)
-                Text(stringResource(R.string.drag_tip_text_bottom), color = MaterialTheme.colorScheme.onPrimary)
+                Text(
+                    stringResource(R.string.drag_tip_text_top),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    stringResource(R.string.drag_tip_text_bottom),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }

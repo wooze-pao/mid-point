@@ -32,6 +32,7 @@ import com.wooze.mid_point.viewModel.MainViewModel
 sealed class SettingItemData {
     abstract val title: String
     abstract val label: String
+
     data class SwitchItem(
         override val title: String,
         override val label: String,
@@ -96,20 +97,23 @@ fun CategoryItems(
                 bottomStart = 5.dp,
                 bottomEnd = 5.dp
             )
+
             index == list.size - 1 -> RoundedCornerShape(
                 bottomStart = 20.dp,
                 bottomEnd = 20.dp,
                 topStart = 5.dp,
                 topEnd = 5.dp
             )
+
             else -> RoundedCornerShape(5.dp)
 
 
         }
         when (item) {
             is SettingItemData.ClickItem -> {
-                ClickItem(item.title,item.label,shape,item.onClick)
+                ClickItem(item.title, item.label, shape, item.onClick)
             }
+
             is SettingItemData.SwitchItem -> {
                 SettingItem(
                     title = item.title,
@@ -163,10 +167,12 @@ fun SettingItem(
 }
 
 @Composable
-fun ClickItem(title: String,
-              label: String,
-              clip: RoundedCornerShape,
-              onClick: () -> Unit) {
+fun ClickItem(
+    title: String,
+    label: String,
+    clip: RoundedCornerShape,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(bottom = 3.dp)
@@ -175,8 +181,7 @@ fun ClickItem(title: String,
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .background(Color.White)
-            .padding(15.dp)
-            , verticalAlignment = Alignment.CenterVertically,
+            .padding(15.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
 
     ) {

@@ -5,11 +5,11 @@ import android.util.Log
 import com.wooze.mid_point.data.DataStoreManager
 
 class MyApplication : Application() {
-    lateinit var dataStoreManager : DataStoreManager
+    lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("mpDebug","m ike")
+        Log.d("mpDebug", "m ike")
         dataStoreManager = DataStoreManager(this)
     }
 

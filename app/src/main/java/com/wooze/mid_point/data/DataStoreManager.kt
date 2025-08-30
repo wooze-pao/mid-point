@@ -9,8 +9,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class DataStoreManager(val context : Context) {
-    val Context.dataStore : DataStore<Preferences> by preferencesDataStore("Setting")
+class DataStoreManager(val context: Context) {
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore("Setting")
 
     val TILE_AUTO_COLLAPSE = booleanPreferencesKey("tile_collapse")
     val isAutoCollapse: Flow<Boolean> = context.dataStore.data.map { preferences ->

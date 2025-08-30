@@ -9,7 +9,7 @@ object SizesDp {
     val WINDOW_HEIGHT: Dp = 120.dp
     val WINDOW_EXPAND: Dp = 500.dp
     val WINDOW_WID_GAP: Dp = 20.dp
-    val WINDOW_GAP_R: Dp = - (WINDOW_WIDTH - WINDOW_WID_GAP)
+    val WINDOW_GAP_R: Dp = -(WINDOW_WIDTH - WINDOW_WID_GAP)
 
     // 窗口内卡片尺寸
     val ITEM_WIDTH: Dp = 130.dp

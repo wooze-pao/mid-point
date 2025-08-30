@@ -1,7 +1,5 @@
 package com.wooze.mid_point.viewModel
 
-import android.annotation.SuppressLint
-import android.app.Application
 import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Context
@@ -13,7 +11,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wooze.mid_point.MyApplication
@@ -21,15 +18,13 @@ import com.wooze.mid_point.R
 import com.wooze.mid_point.data.DataStoreManager
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainViewModel() : ViewModel() {
     private val _haveOverlayPermission = mutableStateOf(false)
 
-    lateinit var dataStoreManager : DataStoreManager
+    lateinit var dataStoreManager: DataStoreManager
     val haveOverlayPermission: State<Boolean> = _haveOverlayPermission
 
     private val _isAutoCollapse = mutableStateOf(true)
@@ -41,7 +36,8 @@ class MainViewModel() : ViewModel() {
     }
 
     fun requestAddTile(context: Context) {
-        val statusBarManager: StatusBarManager = context.getSystemService(StatusBarManager::class.java)
+        val statusBarManager: StatusBarManager =
+            context.getSystemService(StatusBarManager::class.java)
         val executor = java.util.concurrent.Executors.newSingleThreadExecutor()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             statusBarManager.requestAddTileService(
@@ -50,12 +46,12 @@ class MainViewModel() : ViewModel() {
                 Icon.createWithResource(context, R.drawable.ic_launcher_monochrome),
                 executor
             ) { callback ->
-                Log.d("mpDebug","$callback")
+                Log.d("mpDebug", "$callback")
             }
         }
     }
 
-    suspend fun initData (context: Context) {
+    suspend fun initData(context: Context) {
         val applicationContext = context.applicationContext as MyApplication
         dataStoreManager = applicationContext.dataStoreManager
         dataStoreManager.isAutoCollapse.collectLatest { value ->
@@ -63,7 +59,7 @@ class MainViewModel() : ViewModel() {
         }
     }
 
-    fun changeData (boolean: Boolean) {
+    fun changeData(boolean: Boolean) {
         _isAutoCollapse.value = boolean
         viewModelScope.launch {
             dataStoreManager.setAutoCollapse(boolean)

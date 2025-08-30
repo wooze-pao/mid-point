@@ -80,7 +80,7 @@ fun TypeCategory(data: DragData) {
                         R.drawable.icon_color_zip
                     )
 
-                    "pdf" -> FileWithName( data, "PDF文件", R.drawable.icon_color_pdf)
+                    "pdf" -> FileWithName(data, "PDF文件", R.drawable.icon_color_pdf)
                     "octet-stream" -> FileWithName(
                         data,
                         "未知文件",

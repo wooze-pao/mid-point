@@ -10,12 +10,10 @@ import android.util.Log
 import com.wooze.mid_point.MyApplication
 import com.wooze.mid_point.activities.FloatActivity
 import com.wooze.mid_point.activities.QSActivity
-import com.wooze.mid_point.data.DataStoreManager
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.FloatWindowAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -30,7 +28,7 @@ class FloatControlTile : TileService() {
         CoroutineScope(Dispatchers.Main).launch {
             Log.d("mpDebug", "Starting to collect isAutoCollapse")
             autoCollapse = dataStoreManager.isAutoCollapse.first()
-            Log.d("mpDebug","hihi")
+            Log.d("mpDebug", "hihi")
             val willShow = !UiState.isShowing.value
             if (UiState.isShowing.value) {
                 FloatWindowAction.closeFloatActivity()
@@ -46,10 +44,14 @@ class FloatControlTile : TileService() {
                         startActivityAndCollapse(pendingIntent)
                     }
                 }
-            }
-            else {
+            } else {
                 val intent = Intent(this@FloatControlTile, FloatActivity::class.java)
-                val pendingIntent = PendingIntent.getActivity(this@FloatControlTile,0,intent, PendingIntent.FLAG_IMMUTABLE)
+                val pendingIntent = PendingIntent.getActivity(
+                    this@FloatControlTile,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     startActivityAndCollapse(pendingIntent)
                 } else {

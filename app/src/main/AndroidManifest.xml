@@ -25,7 +25,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
 
         </activity>
@@ -34,17 +35,14 @@
             android:name=".activities.FloatActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentStyle"
-            android:exported="false"
-            >
-        </activity>
+            android:exported="false"></activity>
 
         <activity
             android:name=".activities.QSActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentStyle"
             android:exported="false"
-            android:excludeFromRecents="true"
-            >
+            android:excludeFromRecents="true">
 
         </activity>
 
@@ -57,8 +55,9 @@
             android:theme="@style/TranslucentStyle">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>

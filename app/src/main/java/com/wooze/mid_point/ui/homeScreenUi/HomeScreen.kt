@@ -1,12 +1,8 @@
 package com.wooze.mid_point.ui.homeScreenUi
 
-import android.app.StatusBarManager
-import android.content.ComponentName
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,10 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.wooze.mid_point.R
-import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.ui.ButtonExp
 import com.wooze.mid_point.viewModel.MainViewModel
 

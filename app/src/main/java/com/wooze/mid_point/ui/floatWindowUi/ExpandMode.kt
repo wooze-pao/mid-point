@@ -1,6 +1,5 @@
 package com.wooze.mid_point.ui.floatWindowUi
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,11 +41,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.wooze.mid_point.R
+import com.wooze.mid_point.TypeCategory
 import com.wooze.mid_point.data.SizesDp
 import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.DataTools
 import com.wooze.mid_point.tools.FloatWindowAction
-import com.wooze.mid_point.TypeCategory
 import com.wooze.mid_point.ui.addon.dragOutData
 import com.wooze.mid_point.viewModel.FloatViewModel
 
@@ -76,7 +75,13 @@ fun ContentList(viewModel: FloatViewModel, context: Context) {
             val actualIndex = UiState.groupDragList.size - index - 1
             if (viewModel.clickedGroupIndex == null) {
                 item(key = data.hashCode()) {
-                    val isSelected by remember { derivedStateOf { viewModel.selectedGroups.contains(actualIndex) } }
+                    val isSelected by remember {
+                        derivedStateOf {
+                            viewModel.selectedGroups.contains(
+                                actualIndex
+                            )
+                        }
+                    }
                     Box(
                         modifier = Modifier
                             .requiredWidth(SizesDp.ITEM_WIDTH)
@@ -205,7 +210,10 @@ fun MenuBar(viewModel: FloatViewModel) {
                     .background(MaterialTheme.colorScheme.background),
                 contentAlignment = Alignment.Center
             ) {
-                Text("${UiState.groupDragList.size}", color = MaterialTheme.colorScheme.onBackground)
+                Text(
+                    "${UiState.groupDragList.size}",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
             IconButton(onClick = { viewModel.toggleMenu() }) {
                 Icon(painterResource(R.drawable.menu), contentDescription = null)
