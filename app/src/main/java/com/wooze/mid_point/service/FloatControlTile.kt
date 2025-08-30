@@ -9,10 +9,48 @@ import com.wooze.mid_point.tools.FloatWindowAction
 class FloatControlTile : TileService() {
     override fun onClick() {
         super.onClick()
-        FloatWindowAction.toggleFloatWindow(
-            this,
-            Intent.FLAG_ACTIVITY_NEW_TASK
-        ) // objects -> FloatWindowAction 中定义
+        val applicationContext = this.applicationContext as MyApplication
+        val dataStoreManager = applicationContext.dataStoreManager
+        var autoCollapse = true
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Log.d("mpDebug", "Starting to collect isAutoCollapse")
+            autoCollapse = dataStoreManager.isAutoCollapse.first()
+            Log.d("mpDebug","hihi")
+            val willShow = !UiState.isShowing.value
+            if (UiState.isShowing.value) {
+                FloatWindowAction.closeFloatActivity()
+                if (autoCollapse) {
+                    val intent = Intent(this@FloatControlTile, QSActivity::class.java)
+                    val pendingIntent = PendingIntent.getActivity(
+                        this@FloatControlTile,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_IMMUTABLE
+                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        startActivityAndCollapse(pendingIntent)
+                    }
+                }
+            }
+            else {
+                val intent = Intent(this@FloatControlTile, FloatActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(this@FloatControlTile,0,intent, PendingIntent.FLAG_IMMUTABLE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    startActivityAndCollapse(pendingIntent)
+                } else {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    @Suppress("DEPRECATION")
+                    startActivityAndCollapse(intent)
+                }
+            }
+            qsTile.state = if (willShow) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                qsTile.subtitle = if (willShow) "开启中" else "未开启"
+            }
+            qsTile.updateTile()
+        }
+
     }
 
     override fun onStartListening() {
