@@ -9,7 +9,6 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("mpDebug", "m ike")
         dataStoreManager = DataStoreManager(this)
     }
 

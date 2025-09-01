@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import com.wooze.mid_point.MyApplication
 import com.wooze.mid_point.activities.FloatActivity
 import com.wooze.mid_point.activities.QSActivity
@@ -23,12 +22,10 @@ class FloatControlTile : TileService() {
         super.onClick()
         val applicationContext = this.applicationContext as MyApplication
         val dataStoreManager = applicationContext.dataStoreManager
-        var autoCollapse = true
+        var autoCollapse: Boolean
 
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("mpDebug", "Starting to collect isAutoCollapse")
             autoCollapse = dataStoreManager.isAutoCollapse.first()
-            Log.d("mpDebug", "hihi")
             val willShow = !UiState.isShowing.value
             if (UiState.isShowing.value) {
                 FloatWindowAction.closeFloatActivity()
@@ -53,6 +50,7 @@ class FloatControlTile : TileService() {
                     PendingIntent.FLAG_IMMUTABLE
                 )
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    @SuppressLint("StartActivityAndCollapseDeprecated")
                     startActivityAndCollapse(pendingIntent)
                 } else {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -33,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wooze.mid_point.R
 import com.wooze.mid_point.data.NavRouter
+import com.wooze.mid_point.state.UiState
 import com.wooze.mid_point.tools.FloatWindowAction.closeFloatActivity
 import com.wooze.mid_point.tools.FloatWindowAction.openFloatActivity
 import com.wooze.mid_point.ui.SettingPage
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.checkOverlayPermission(this)
+        UiState.isShowing.value = FloatActivity.check()
     }
 
 }

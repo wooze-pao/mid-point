@@ -35,7 +35,8 @@
             android:name=".activities.FloatActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentStyle"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
 
         <activity
             android:name=".activities.QSActivity"
