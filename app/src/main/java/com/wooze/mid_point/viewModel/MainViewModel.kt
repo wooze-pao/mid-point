@@ -7,6 +7,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -35,6 +36,7 @@ class MainViewModel() : ViewModel() {
         return haveOverlayPermission.value
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun requestAddTile(context: Context) {
         val statusBarManager: StatusBarManager =
             context.getSystemService(StatusBarManager::class.java)

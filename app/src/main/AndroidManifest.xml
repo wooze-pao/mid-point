@@ -35,16 +35,14 @@
             android:name=".activities.FloatActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentStyle"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <activity
             android:name=".activities.QSActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentStyle"
             android:exported="false"
-            android:excludeFromRecents="true">
-
-        </activity>
+            android:excludeFromRecents="true" />
 
 
         <activity
