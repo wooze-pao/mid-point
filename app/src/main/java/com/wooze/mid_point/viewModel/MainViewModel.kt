@@ -7,7 +7,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -16,7 +15,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wooze.mid_point.MyApplication
 import com.wooze.mid_point.R
-import com.wooze.mid_point.activities.FloatActivity
 import com.wooze.mid_point.data.DataStoreManager
 import com.wooze.mid_point.service.FloatControlTile
 import com.wooze.mid_point.state.UiState
@@ -38,22 +36,18 @@ class MainViewModel() : ViewModel() {
     }
 
     fun requestAddTile(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val statusBarManager: StatusBarManager =
-                context.getSystemService(StatusBarManager::class.java)
-            val executor = java.util.concurrent.Executors.newSingleThreadExecutor()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                statusBarManager.requestAddTileService(
-                    ComponentName(context, FloatControlTile::class.java),
-                    context.getString(R.string.tile_label),
-                    Icon.createWithResource(context, R.drawable.ic_launcher_monochrome),
-                    executor
-                ) { callback ->
-                    Log.d("mpDebug", "$callback")
-                }
+        val statusBarManager: StatusBarManager =
+            context.getSystemService(StatusBarManager::class.java)
+        val executor = java.util.concurrent.Executors.newSingleThreadExecutor()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            statusBarManager.requestAddTileService(
+                ComponentName(context, FloatControlTile::class.java),
+                context.getString(R.string.tile_label),
+                Icon.createWithResource(context, R.drawable.ic_launcher_monochrome),
+                executor
+            ) { callback ->
+                Log.d("mpDebug", "$callback")
             }
-        } else {
-            Toast.makeText(context,"请前往控制中心自行添加", Toast.LENGTH_SHORT).show()
         }
     }
 

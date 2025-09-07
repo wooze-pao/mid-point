@@ -177,9 +177,5 @@ class FloatActivity : ComponentActivity() {
                 instance?.finish()
             }
         }
-
-        fun check(): Boolean {
-            return instance != null
-        }
     }
 }
