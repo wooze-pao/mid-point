@@ -6,18 +6,18 @@
     <group>
         <clip-path android:pathData="M0,0h60v80h-60z" />
         <path
-            android:pathData="M0,8C0,3.582 3.582,0 8,0H34L60,26V72C60,76.418 56.418,80 52,80H8C3.582,80 0,76.418 0,72V8Z"
-            android:fillColor="#344054" />
+            android:fillColor="#344054"
+            android:pathData="M0,8C0,3.582 3.582,0 8,0H34L60,26V72C60,76.418 56.418,80 52,80H8C3.582,80 0,76.418 0,72V8Z" />
         <path
-            android:pathData="M40,26H60L34,0V20C34,23.314 36.686,26 40,26Z"
+            android:fillAlpha="0.5"
             android:fillColor="#ffffff"
-            android:fillAlpha="0.5" />
+            android:pathData="M40,26H60L34,0V20C34,23.314 36.686,26 40,26Z" />
     </group>
     <path
-        android:pathData="M24,43.75L15,53.074L24,61.75M36,43.75L45,53.074L36,61.75M33,37L27.75,67"
-        android:strokeLineJoin="round"
-        android:strokeWidth="3"
         android:fillColor="#00000000"
+        android:pathData="M24,43.75L15,53.074L24,61.75M36,43.75L45,53.074L36,61.75M33,37L27.75,67"
+        android:strokeWidth="3"
         android:strokeColor="#ffffff"
-        android:strokeLineCap="round" />
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>

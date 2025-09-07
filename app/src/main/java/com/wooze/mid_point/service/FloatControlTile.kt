@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import androidx.compose.runtime.snapshotFlow
 import com.wooze.mid_point.MyApplication
 import com.wooze.mid_point.activities.FloatActivity

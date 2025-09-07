@@ -1,6 +1,5 @@
 package com.wooze.mid_point.data
 
-import android.R.attr.enabled
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -30,7 +29,7 @@ class DataStoreManager(val context: Context) {
     val isAutoCollapse: Flow<Boolean> = getKeyFlow(TILE_AUTO_COLLAPSE, true)
 
     suspend fun setAutoCollapse(enabled: Boolean) {
-        setKeyValue(TILE_AUTO_COLLAPSE,enabled)
+        setKeyValue(TILE_AUTO_COLLAPSE, enabled)
     }
 
 }

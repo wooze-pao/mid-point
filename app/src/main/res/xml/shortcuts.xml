@@ -1,13 +1,13 @@
 <?xml version ="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="compose"
         android:enabled="true"
         android:icon="@drawable/ic_open"
+        android:shortcutId="compose"
         android:shortcutShortLabel="@string/short_label">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.wooze.mid_point"
-            android:targetClass="com.wooze.mid_point.activities.FloatActivity" />
+            android:targetClass="com.wooze.mid_point.activities.FloatActivity"
+            android:targetPackage="com.wooze.mid_point" />
     </shortcut>
 </shortcuts>
